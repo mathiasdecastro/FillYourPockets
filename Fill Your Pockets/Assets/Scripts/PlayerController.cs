@@ -5,13 +5,18 @@ public class PlayerController : MonoBehaviour
 {    
     public float moveSpeed = 5f;
     public float arrowSpeed = 20f;
+    public float attackRange = 1f;
+    public float attackDuration = 0.5f;
     public GameObject arrowPrefab;
+    public GameObject hitboxPrefab;
     public Transform shootPoint;
      
     private bool isMoving = false;
+    private bool isAttacking = false;
     private Vector2 targetPos;
     private Vector2 moveDirection;
     private Animator animator;
+    private GameObject currentHitbox;
 
     void Start()
     {
@@ -27,6 +32,9 @@ public class PlayerController : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.Space))
             HandleShootingInput();
+
+        if (Input.GetKeyDown(KeyCode.F))
+            HandleAttackInput();
     }
 
     private void HandleMovementInput()
@@ -75,6 +83,28 @@ public class PlayerController : MonoBehaviour
         Destroy(arrow, 5f);   
     }
 
+    private void HandleAttackInput()
+    {
+        if (isAttacking)
+            return;
+        else
+            StartCoroutine(Attack());
+    }
+
+    private IEnumerator Attack()
+    {
+        isAttacking = true;
+
+        currentHitbox = Instantiate(hitboxPrefab, transform.position, Quaternion.identity);
+        currentHitbox.transform.position = transform.position + transform.right * attackRange;
+        
+        yield return new WaitForSeconds(attackDuration);
+        
+        Destroy(currentHitbox);
+       
+        isAttacking = false;
+    }
+
     private IEnumerator MoveToTarget(Vector2 dest)
     {
         isMoving = true;
@@ -88,5 +118,14 @@ public class PlayerController : MonoBehaviour
 
         transform.position = dest;
         isMoving = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Debug.Log("Enemy hit !");
+            other.GetComponent<EnemyController>().TakeDamage(10);
+        }
     }
 }

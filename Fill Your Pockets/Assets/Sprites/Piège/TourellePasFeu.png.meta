@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      TourellePasFeu_0: 7141464048838452602
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

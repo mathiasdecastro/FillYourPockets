@@ -159,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      HeroPrendFleche_0: -2341248198995454974
+      HeroPrendFleche_1: -4131352749062704495
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
