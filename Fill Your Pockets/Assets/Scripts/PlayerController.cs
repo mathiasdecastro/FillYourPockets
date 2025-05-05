@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {    
     public float moveSpeed = 5f;
+    public TileHighlight tileHighlight;
 
     private bool isMoving = false;
     private Vector2 targetPos;
@@ -33,6 +34,8 @@ public class PlayerController : MonoBehaviour
                 targetPos = (Vector2)transform.position + input;
                 StartCoroutine(MoteToTarget(targetPos));
             }
+
+            tileHighlight.ShowReachableTiles();
         }
     }
 
