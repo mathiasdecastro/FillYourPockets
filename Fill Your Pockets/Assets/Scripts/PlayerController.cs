@@ -7,15 +7,17 @@ public class PlayerController : MonoBehaviour
     public float arrowSpeed = 20f;
     public GameObject arrowPrefab;
     public Transform shootPoint;
-
+     
     private bool isMoving = false;
     private Vector2 targetPos;
     private Vector2 moveDirection;
+    private Animator animator;
 
     void Start()
     {
         targetPos = transform.position;
         moveDirection = new Vector2(1, -0.5f);
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -80,6 +82,7 @@ public class PlayerController : MonoBehaviour
         while ((Vector2)transform.position != dest)
         {
             transform.position = Vector2.MoveTowards(transform.position, dest, moveSpeed * Time.deltaTime);
+           
             yield return null;
         }
 
