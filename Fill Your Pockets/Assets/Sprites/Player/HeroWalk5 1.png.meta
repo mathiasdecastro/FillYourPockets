@@ -1,7 +1,13 @@
 fileFormatVersion: 2
-guid: 52d9fd9272f5f4244b2925d02bce3fe8
+guid: 0cf8e9bae5029d744a07d4c76d508cab
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 5795720861433871851
+    second: HeroWalk5 1_0
+  - first:
+      213: 731328783922731471
+    second: HeroWalk5 1_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -34,12 +40,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: 0
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -95,7 +101,51 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: HeroWalk5 1_0
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 34
+        width: 662
+        height: 862
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bed361b9a698e6050800000000000000
+      internalID: 5795720861433871851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HeroWalk5 1_1
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 65
+        width: 145
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc99bbb77a3362a00800000000000000
+      internalID: 731328783922731471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -109,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      HeroWalk5 1_0: 5795720861433871851
+      HeroWalk5 1_1: 731328783922731471
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
