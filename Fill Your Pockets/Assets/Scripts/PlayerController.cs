@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             animator.SetTrigger("Shoot");
-            HandleShootingInput();
         }
         if (Input.GetKeyDown(KeyCode.F))
             HandleAttackInput();
@@ -80,7 +79,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void HandleShootingInput()
+    public void ShootArrow()
     {
         GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
         Rigidbody2D rb = arrow.GetComponent<Rigidbody2D>();
@@ -91,7 +90,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = isoDirection * arrowSpeed;
         }
 
-        Destroy(arrow, 5f);
+        Destroy(arrow, 3f);
     }
 
     private void HandleAttackInput()
@@ -101,6 +100,7 @@ public class PlayerController : MonoBehaviour
         else
             StartCoroutine(Attack());
     }
+
 
     private void HandleThrowInput()
     {
