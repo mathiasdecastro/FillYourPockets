@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator MoveToTarget(Vector2 dest)
     {
         isMoving = true;
-        animator.SetBool("IsWalking", true);
+        animator.SetBool("Walk", true);
 
         while ((Vector2)transform.position != dest)
         {
@@ -137,7 +137,7 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.position = dest;
-        animator.SetBool("IsWalking", false);
+        animator.SetBool("Walk", false);
         isMoving = false;
     }
 
