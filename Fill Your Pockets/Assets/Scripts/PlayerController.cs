@@ -37,12 +37,11 @@ public class PlayerController : MonoBehaviour
         }
         
         if (Input.GetKeyDown(KeyCode.Space))
-        {
             animator.SetTrigger("Shoot");
-        }
+        
         if (Input.GetKeyDown(KeyCode.F))
             HandleAttackInput();
-        
+    
         if (Input.GetKeyDown(KeyCode.E))
             HandleThrowInput();
     }
@@ -90,7 +89,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = isoDirection * arrowSpeed;
         }
 
-        Destroy(arrow, 3f);
+        Destroy(arrow, 2f);
     }
 
     private void HandleAttackInput()
@@ -100,7 +99,6 @@ public class PlayerController : MonoBehaviour
         else
             StartCoroutine(Attack());
     }
-
 
     private void HandleThrowInput()
     {
