@@ -31,11 +31,16 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (!isMoving)
+        {
+            animator.SetBool("Walk", false);
             HandleMovementInput();
+        }
         
         if (Input.GetKeyDown(KeyCode.Space))
+        {
+            animator.SetTrigger("Shoot");
             HandleShootingInput();
-
+        }
         if (Input.GetKeyDown(KeyCode.F))
             HandleAttackInput();
         
@@ -122,6 +127,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator MoveToTarget(Vector2 dest)
     {
         isMoving = true;
+        animator.SetBool("IsWalking", true);
 
         while ((Vector2)transform.position != dest)
         {
@@ -131,6 +137,7 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.position = dest;
+        animator.SetBool("IsWalking", false);
         isMoving = false;
     }
 
