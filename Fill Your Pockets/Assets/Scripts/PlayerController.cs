@@ -7,8 +7,11 @@ public class PlayerController : MonoBehaviour
     public float arrowSpeed = 20f;
     public float attackRange = 1f;
     public float attackDuration = 0.5f;
+    public float throwDistance = 2f;
+    public int gold = 0;
     public GameObject arrowPrefab;
     public GameObject hitboxPrefab;
+    public GameObject bombPrefab;
     public Transform shootPoint;
      
     private bool isMoving = false;
@@ -35,6 +38,9 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
             HandleAttackInput();
+        
+        if (Input.GetKeyDown(KeyCode.E))
+            HandleThrowInput();
     }
 
     private void HandleMovementInput()
@@ -80,7 +86,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = isoDirection * arrowSpeed;
         }
 
-        Destroy(arrow, 5f);   
+        Destroy(arrow, 5f);
     }
 
     private void HandleAttackInput()
@@ -89,6 +95,14 @@ public class PlayerController : MonoBehaviour
             return;
         else
             StartCoroutine(Attack());
+    }
+
+    private void HandleThrowInput()
+    {
+        targetPos = (Vector2)transform.position + moveDirection * throwDistance;
+        
+        GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
+        bomb.GetComponent<Bomb>().ExplodeAt(targetPos);
     }
 
     private IEnumerator Attack()
@@ -127,5 +141,20 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Enemy hit !");
             other.GetComponent<EnemyController>().TakeDamage(10);
         }
+
+        Chest chest = other.GetComponent<Chest>();
+        
+        if (chest != null)
+        {
+            int collectedGold = chest.GetGold();
+            AddGold(collectedGold);
+            Debug.Log("Tu as récupéré : " + collectedGold);
+        }
+    }
+
+    public void AddGold(int amount)
+    {
+        gold += amount;
+        Debug.Log("Gold : " + gold);
     }
 }
