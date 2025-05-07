@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
             HandleAttackInput();
     
         if (Input.GetKeyDown(KeyCode.E))
-            HandleThrowInput();
+            animator.SetTrigger("Potion");
     }
 
     private void HandleMovementInput()
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Attack());
     }
 
-    private void HandleThrowInput()
+    public void ThrowPotion()
     {
         targetPos = (Vector2)transform.position + moveDirection * throwDistance;
         
