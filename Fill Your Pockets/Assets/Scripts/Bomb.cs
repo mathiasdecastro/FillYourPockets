@@ -8,6 +8,12 @@ public class Bomb : MonoBehaviour
     public float damage = 50f;
     public LayerMask damagerLayer;
 
+    private Animator animator;
+
+    public void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
     public void ExplodeAt(Vector2 targetPosition)
     {
         StartCoroutine(Explode(targetPosition));
@@ -16,9 +22,13 @@ public class Bomb : MonoBehaviour
     private IEnumerator Explode(Vector2 target)
     {
         transform.position = target;
-        
         yield return new WaitForSeconds(delayBeforeExplode);
 
+        animator.SetTrigger("bomb");
+        yield return null;
+
+        float animLength = animator.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(animLength);
         DoExplosionDamage(target);
         Destroy(gameObject);
     }
