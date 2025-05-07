@@ -141,19 +141,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Chest"))
         {
-            Debug.Log("Enemy hit !");
-            other.GetComponent<EnemyController>().TakeDamage(10);
-        }
-
-        Chest chest = other.GetComponent<Chest>();
-        
-        if (chest != null)
-        {
-            int collectedGold = chest.GetGold();
-            AddGold(collectedGold);
-            Debug.Log("Tu as récupéré : " + collectedGold);
+            Chest chest = other.GetComponent<Chest>();
+            
+            if (chest != null)
+            {
+                int collectedGold = chest.GetGold();
+                AddGold(collectedGold);
+                Debug.Log("Tu as récupéré : " + collectedGold);
+            }
         }
     }
 

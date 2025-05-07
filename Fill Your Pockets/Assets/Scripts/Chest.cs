@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem.Controls;
 
 public class Chest : MonoBehaviour
 {
@@ -24,8 +23,8 @@ public class Chest : MonoBehaviour
     public int GetGold()
     {
         int goldToGive = storeGold;
-        storeGold = 0;
-       
+        Destroy(gameObject);
+
        return goldToGive;
     }
 
