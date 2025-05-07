@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour
+public class Potion : MonoBehaviour
 {
     public float delayBeforeExplode = 0.5f;
     public float damage = 50f;
-    public LayerMask damagerLayer;
+    public LayerMask damageLayer;
 
     private Animator animator;
 
@@ -14,21 +14,23 @@ public class Bomb : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
+
     public void ExplodeAt(Vector2 targetPosition)
     {
+        transform.position = targetPosition;
         StartCoroutine(Explode(targetPosition));
     }
 
     private IEnumerator Explode(Vector2 target)
     {
-        transform.position = target;
         yield return new WaitForSeconds(delayBeforeExplode);
 
         animator.SetTrigger("bomb");
         yield return null;
 
         float animLength = animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(animLength);
+        yield return new WaitForSeconds(animLength / 2);
+        
         DoExplosionDamage(target);
         Destroy(gameObject);
     }
@@ -39,16 +41,14 @@ public class Bomb : MonoBehaviour
 
         foreach (Vector2 pos in affectedTiles)
         {
-            Collider2D[] hits = Physics2D.OverlapPointAll(pos, damagerLayer);
+            Collider2D[] hits = Physics2D.OverlapPointAll(pos, damageLayer);
 
             foreach (Collider2D hit in hits)
             {
                 EnemyController enemy = hit.GetComponent<EnemyController>();
 
                 if (enemy != null)
-                {
                     enemy.TakeDamage((int)damage);
-                }
             }
         }
     }

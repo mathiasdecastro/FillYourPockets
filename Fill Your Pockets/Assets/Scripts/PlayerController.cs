@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
     public GameObject bombPrefab;
     public Transform shootPoint;
      
-    private bool isMoving = false;
     private bool isAttacking = false;
     private Vector2 targetPos;
     private Vector2 moveDirection;
@@ -29,53 +28,18 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update()
-    {
-        if (!isMoving)
-        {
-            animator.SetBool("Walk", false);
-            HandleMovementInput();
-        }
-        
+    {        
         if (Input.GetKeyDown(KeyCode.Space))
+        {
             animator.SetTrigger("Shoot");
+            isAttacking = true;
+        }
         
         if (Input.GetKeyDown(KeyCode.F))
             HandleAttackInput();
     
         if (Input.GetKeyDown(KeyCode.E))
             animator.SetTrigger("Potion");
-    }
-
-    private void HandleMovementInput()
-    {
-        Vector2 input = Vector2.zero;
-
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            input = new Vector2(1, 0.5f);
-            moveDirection = new Vector2(1, 0.5f);
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            input = new Vector2(-1, -0.5f);
-            moveDirection = new Vector2(-1, -0.5f);
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            input = new Vector2(1, -0.5f);
-            moveDirection = new Vector2(1, -0.5f);
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            input = new Vector2(-1, 0.5f);
-            moveDirection = new Vector2(-1, 0.5f);
-        }
-
-        if (input != Vector2.zero)
-        {
-            targetPos = (Vector2)transform.position + input;
-            StartCoroutine(MoveToTarget(targetPos));
-        }
     }
 
     public void ShootArrow()
@@ -103,9 +67,8 @@ public class PlayerController : MonoBehaviour
     public void ThrowPotion()
     {
         targetPos = (Vector2)transform.position + moveDirection * throwDistance;
-        
-        GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
-        bomb.GetComponent<Bomb>().ExplodeAt(targetPos);
+        GameObject potion = Instantiate(bombPrefab, transform.position, Quaternion.identity);
+        potion.GetComponent<Potion>().ExplodeAt(targetPos);
     }
 
     private IEnumerator Attack()
@@ -120,23 +83,6 @@ public class PlayerController : MonoBehaviour
         Destroy(currentHitbox);
        
         isAttacking = false;
-    }
-
-    private IEnumerator MoveToTarget(Vector2 dest)
-    {
-        isMoving = true;
-        animator.SetBool("Walk", true);
-
-        while ((Vector2)transform.position != dest)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, dest, moveSpeed * Time.deltaTime);
-           
-            yield return null;
-        }
-
-        transform.position = dest;
-        animator.SetBool("Walk", false);
-        isMoving = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
