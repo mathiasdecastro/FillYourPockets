@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {    
@@ -9,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float attackDuration = 0.5f;
     public float throwDistance = 2f;
     public int gold = 0;
+    public TextMeshProUGUI goldText;
     public GameObject arrowPrefab;
     public GameObject hitboxPrefab;
     public GameObject bombPrefab;
@@ -26,6 +29,7 @@ public class PlayerController : MonoBehaviour
         targetPos = transform.position;
         moveDirection = new Vector2(1, -0.5f);
         animator = GetComponent<Animator>();
+        UpdateGoldText();
     }
 
     void Update()
@@ -158,5 +162,14 @@ public class PlayerController : MonoBehaviour
     {
         gold += amount;
         Debug.Log("Gold : " + gold);
+        UpdateGoldText(); 
+    }
+
+    private void UpdateGoldText()
+    {
+        if (goldText != null)
+        {
+            goldText.text = gold.ToString();
+        }
     }
 }
