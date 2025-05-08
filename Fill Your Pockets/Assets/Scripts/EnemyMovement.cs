@@ -31,7 +31,7 @@ public class EnemyMovement : MonoBehaviour
 
         if (timer >= moveCooldown)
         {
-            //MoveToTarget();
+            MoveToTarget();
             timer = 0f;
         }   
     }
