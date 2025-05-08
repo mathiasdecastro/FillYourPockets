@@ -45,7 +45,7 @@ public class Potion : MonoBehaviour
 
             foreach (Collider2D hit in hits)
             {
-                EnemyController enemy = hit.GetComponent<EnemyController>();
+                EnemyCombat enemy = hit.GetComponent<EnemyCombat>();
 
                 if (enemy != null)
                     enemy.TakeDamage((int)damage);

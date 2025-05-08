@@ -16,7 +16,6 @@ public class Chest : MonoBehaviour
         {
             storeGold += goldPerInterval;
             timer = 0f;
-            Debug.Log("Gold : " + storeGold);
         }
     }
 
