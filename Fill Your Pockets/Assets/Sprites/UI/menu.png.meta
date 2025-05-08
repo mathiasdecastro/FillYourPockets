@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c716e96d30c83dc42adf516abcd5635b
+guid: ef190ad9881d404429911ac6b6e4021c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5986104555983055613
-    second: spellStick_0
+      213: 7042847911465117151
+    second: menu_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: spellStick_0
+      name: menu_0
       rect:
         serializedVersion: 2
-        x: 41
-        y: 37
-        width: 942
-        height: 947
+        x: 77
+        y: 79
+        width: 870
+        height: 872
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 30558404f951deca0800000000000000
-      internalID: -5986104555983055613
+      spriteID: fd5eaf16cd83db160800000000000000
+      internalID: 7042847911465117151
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      spellStick_0: -5986104555983055613
+      menu_0: 7042847911465117151
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
