@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {    
@@ -20,11 +21,14 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private GameObject currentHitbox;
 
+    public TextMeshProUGUI goldText;
+
     void Start()
     {
         targetPos = transform.position;
         moveDirection = new Vector2(1, -0.5f);
         animator = GetComponent<Animator>();
+        UpdateGoldText();
     }
 
     void Update()
@@ -104,5 +108,15 @@ public class PlayerController : MonoBehaviour
     {
         gold += amount;
         Debug.Log("Gold : " + gold);
+            UpdateGoldText(); 
+    }
+
+
+    private void UpdateGoldText()
+    {
+        if (goldText != null)
+        {
+            goldText.text = gold.ToString();
+        }
     }
 }
