@@ -8,8 +8,6 @@ public class PlayerCombat : MonoBehaviour
     {
         health -= damage;
 
-        Debug.Log("Health : " + health);
-        
         if (health <= 0)
             Destroy(gameObject);
     }

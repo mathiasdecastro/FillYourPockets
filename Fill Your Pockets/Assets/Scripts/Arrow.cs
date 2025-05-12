@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
-    private int damage = 10;
+    private float damage = 10;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
