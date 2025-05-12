@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public enum StageType
@@ -15,14 +16,25 @@ public enum StageType
 public class TurnManager : MonoBehaviour
 {
     public int maxTurns = 3;
+    public int currentTurn = 0;
     public StageType stage;
     public bool isGameOver = false;
+    public Sprite playerMoveSprite;
+    public Sprite playerAttackSprite;
+    public Sprite enemyMoveSprite;
+    public Sprite enemyAttackSprite;
+    public Sprite turretAttackSprite;
 
-    private int currentTurn = 0;
+    private SpriteRenderer stageImage;
+    private TextMeshProUGUI textTurns;
 
     void Start()
     {
         stage = StageType.PlayerMoveFirst;
+        stageImage = GameObject.Find("StageImage").GetComponent<SpriteRenderer>();
+        stageImage.sprite = playerMoveSprite;
+        textTurns = GameObject.Find("TextTurns").GetComponent<TextMeshProUGUI>();
+        textTurns.text = (maxTurns - currentTurn).ToString();
     }
 
     void Update()
@@ -36,26 +48,32 @@ public class TurnManager : MonoBehaviour
         switch (stage)
         {
             case StageType.PlayerMoveFirst:
+                stageImage.sprite = playerAttackSprite;
                 stage = StageType.PlayerAttack;
                 break;
 
             case StageType.PlayerMoveSecond:
+                stageImage.sprite = enemyMoveSprite;
                 stage = StageType.EnemyMoveFirst;
                 break;
 
             case StageType.PlayerAttack:
+                stageImage.sprite = playerMoveSprite;
                 stage = StageType.PlayerMoveSecond;
                 break;
 
             case StageType.EnemyMoveFirst:
+                stageImage.sprite = enemyAttackSprite;
                 stage = StageType.EnemyAttack;
                 break;
 
             case StageType.EnemyMoveSecond:
+                stageImage.sprite = turretAttackSprite;
                 stage = StageType.TurretAttack;
                 break;
 
             case StageType.EnemyAttack:
+                stageImage.sprite = enemyMoveSprite;
                 stage = StageType.EnemyMoveSecond;
                 break;
 
@@ -65,7 +83,10 @@ public class TurnManager : MonoBehaviour
 
             case StageType.EndTurn:
                 if (!isGameOver)
+                {
                     stage = StageType.PlayerMoveFirst;
+                    stageImage.sprite = playerMoveSprite;
+                }
                 break;
 
             default:
@@ -79,13 +100,11 @@ public class TurnManager : MonoBehaviour
         {
             Debug.Log("Tour : " + (currentTurn + 1) + " Terminé.");
             currentTurn++;
+            textTurns.text = (maxTurns - currentTurn).ToString();
         }
         
         if (currentTurn >= maxTurns)
-        {
-            Debug.Log("La partie est finie");
             isGameOver = true;
-        }
 
         NextStage();
     }

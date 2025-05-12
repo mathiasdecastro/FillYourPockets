@@ -26,8 +26,7 @@ public class Potion : MonoBehaviour
         yield return new WaitForSeconds(delayBeforeExplode);
 
         animator.SetTrigger("bomb");
-        yield return null;
-
+        Debug.Log("Explosion");
         float animLength = animator.GetCurrentAnimatorStateInfo(0).length;
         yield return new WaitForSeconds(animLength / 2);
         

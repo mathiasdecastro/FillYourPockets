@@ -19,22 +19,21 @@ public class PlayerCombat : MonoBehaviour
         direction = new Vector2(1, -0.5f);
     }
 
-    void Update()
+    public void ShootArrowButton()
     {
         if (tm.stage == StageType.PlayerAttack && !tm.isGameOver)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                animator.SetTrigger("Shoot");
-                tm.EndTurn();
-            }
-                
+            animator.SetTrigger("Shoot");
+            tm.EndTurn();
+        }
+    }
 
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                animator.SetTrigger("Potion");
-                tm.EndTurn();
-            }
+    public void ThrowPotionButton()
+    {
+        if (tm.stage == StageType.PlayerAttack && !tm.isGameOver)
+        {
+            animator.SetTrigger("Potion");
+            tm.EndTurn();
         }
     }
 
