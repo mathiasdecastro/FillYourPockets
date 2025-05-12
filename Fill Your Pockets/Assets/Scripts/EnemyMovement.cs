@@ -2,12 +2,9 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public float speed = 5f;
-    public float moveCooldown = 3f;
-
-    private float timer = 0f;
-    private Transform target;
-    private Vector2[] directions = new Vector2[]
+    public float moveSpeed = 5f;
+    public TurnManager tm;
+    public Vector2[] directions = new Vector2[]
     {
         new Vector2(1, 0.5f),
         new Vector2(-1, -0.5f),
@@ -19,6 +16,10 @@ public class EnemyMovement : MonoBehaviour
         new Vector2(0, -1)
     };
 
+    private bool isMoving = false;
+    private bool hasMoved = false;
+    private Transform target;
+    private Vector2 moveTarget;
 
     void Start()
     {
@@ -27,13 +28,23 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
-
-        if (timer >= moveCooldown)
+        if ((tm.stage == StageType.EnemyMoveFirst || tm.stage == StageType.EnemyMoveSecond) && !hasMoved && !tm.isGameOver)
         {
             MoveToTarget();
-            timer = 0f;
-        }   
+            hasMoved = true;
+        }
+
+        if (isMoving)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, moveTarget, moveSpeed * Time.deltaTime);
+
+            if ((Vector2)transform.position == moveTarget)
+            {
+                isMoving = false;
+                hasMoved = false;
+                tm.EndTurn();
+            }
+        }
     }
 
     void MoveToTarget()
@@ -56,6 +67,7 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        transform.position = bestMove;
+        moveTarget = bestMove;
+        isMoving = true;
     }
 }

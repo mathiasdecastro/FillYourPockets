@@ -3,7 +3,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public TurnManager tm;
 
+    private bool hasMoved = false;
     private Vector2 targetPosition;
     private Animator animator;
 
@@ -15,23 +17,33 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if ((Vector2)transform.position == targetPosition)
+        if (tm.stage == StageType.PlayerMoveFirst || tm.stage == StageType.PlayerMoveSecond && !tm.isGameOver)
         {
-            if (Input.GetMouseButtonDown(0))
+            if ((Vector2)transform.position == targetPosition)
             {
-                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector2 nextPos = ConvertToGrid(mousePos);
-
-                if (IsAdjacent(targetPosition, nextPos))
+                if (hasMoved)
                 {
-                    animator.SetBool("Walk", true);
-                    targetPosition = nextPos;
+                    tm.EndTurn();
+                    hasMoved = false;
+                }
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Vector2 nextPos = ConvertToGrid(mousePos);
+
+                    if (IsAdjacent(targetPosition, nextPos))
+                    {
+                        animator.SetBool("Walk", true);
+                        targetPosition = nextPos;
+                        hasMoved = true;
+                    }
                 }
             }
-        }
 
-        transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-        animator.SetBool("Walk", false);
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            animator.SetBool("Walk", false);
+        }
     }
 
     private Vector2 ConvertToGrid(Vector2 input)
