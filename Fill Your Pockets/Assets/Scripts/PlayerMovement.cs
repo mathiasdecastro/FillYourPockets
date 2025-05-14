@@ -1,13 +1,28 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public TurnManager tm;
+    public Tilemap tilemap;
+    public List<Sprite> nonWalkableTiles = new List<Sprite>();
 
     private bool hasMoved = false;
-    private Vector2 targetPosition;
     private Animator animator;
+    private Vector2 targetPosition;
+    private Vector2[] directions = new Vector2[]
+    {
+        new Vector2(1, 0.5f),
+        new Vector2(-1, -0.5f),
+        new Vector2(1, -0.5f),
+        new Vector2(-1, 0.5f),
+        new Vector2(2, 0),
+        new Vector2(-2, 0),
+        new Vector2(0, 1),
+        new Vector2(0, -1)
+    };
 
     void Start()
     {
@@ -32,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
                     Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     Vector2 nextPos = ConvertToGrid(mousePos);
 
-                    if (IsAdjacent(targetPosition, nextPos))
+                    if (IsAdjacent(targetPosition, nextPos) && IsWalkable(mousePos))
                     {
                         animator.SetBool("Walk", true);
                         targetPosition = nextPos;
@@ -61,21 +76,32 @@ public class PlayerMovement : MonoBehaviour
 
     private bool IsAdjacent(Vector2 current, Vector2 target)
     {
-        float dx = target.x - current.x;
-        float dy = target.y - current.y;
-
-        if ((dx == 1 && dy == 0.5f) || 
-            (dx == -1 && dy == -0.5f) || 
-            (dx == 1 && dy == -0.5f) || 
-             (dx == -1 && dy == 0.5f))
-            return true;
-
-        if ((dx == -2 && dy == 0) || 
-            (dx == 0 && dy == -1) || 
-            (dx == 0 && dy == 1) || 
-            (dx == 2 && dy == 0))
-            return true;
+        foreach (Vector2 dir in directions)
+        {
+            if (target == current + dir)
+                return true;
+        }
 
         return false;
+    }
+
+    bool IsWalkable(Vector2 pos)
+    {
+        Vector3 worldPos = new Vector3(pos.x, pos.y, 0);
+        Vector3Int cell = tilemap.WorldToCell(worldPos);
+        TileBase tile = tilemap.GetTile(cell);
+
+        if (tile == null)
+            return false;
+
+        if (tile is Tile tileTyped)
+        {
+            Sprite sprite = tileTyped.sprite;
+            
+            if (nonWalkableTiles.Contains(sprite))
+                return false;
+        }
+
+        return true;
     }
 }
