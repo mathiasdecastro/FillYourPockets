@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 6d8882d2b6a3ea945a23576eaf0b3951
+guid: 2ab651bafedf158418e8e137643fe4f4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6025858951460535786
-    second: logoGrand_0
-  - first:
-      213: -3135310954379499023
-    second: logoGrand_1
+      213: 3794550611322748858
+    second: play_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -103,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: logoGrand_0
+      name: play_0
       rect:
         serializedVersion: 2
-        x: 55
-        y: 105
-        width: 902
-        height: 802
+        x: 603
+        y: 376
+        width: 227
+        height: 134
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,30 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aedb96c3ac620a350800000000000000
-      internalID: 6025858951460535786
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: logoGrand_1
-      rect:
-        serializedVersion: 2
-        x: 704
-        y: 805
-        width: 119
-        height: 112
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1f9a1df6c432d74d0800000000000000
-      internalID: -3135310954379499023
+      spriteID: abf32263da3f8a430800000000000000
+      internalID: 3794550611322748858
       vertices: []
       indices: 
       edges: []
@@ -160,8 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      logoGrand_0: 6025858951460535786
-      logoGrand_1: -3135310954379499023
+      play_0: 3794550611322748858
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
