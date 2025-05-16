@@ -17,24 +17,21 @@ public class MainMenuController : MonoBehaviour
     {
         Debug.Log("oe ça marche");
         tutorialPopup.SetActive(true); 
+        OnStartTutorial();
     }
+
+    public void TestButtonClick()
+    {
+        Debug.Log("Le bouton fonctionne !");
+    }
+
 
     public void OnSaveButtonClicked()
     {
-        SceneManager.LoadScene("GameScene");
-    }
-
-    public void OnSkipTutorial()
-    {
-        SceneManager.LoadScene("GameScene");
         Debug.Log("oe ça marche");
+        SceneManager.LoadScene("SaveScene");
     }
 
-
-    public void StartGame(){
-        Debug.Log("ça marche");
-        SceneManager.LoadScene("GameScene");
-    }
     public void OnStartTutorial()
     {
         tutorial.SetActive(true); 
@@ -44,7 +41,7 @@ public class MainMenuController : MonoBehaviour
 
     public IEnumerator EndTutorialAndLoadGameScene()
     {
-        yield return new WaitForSeconds(5f); 
+        yield return new WaitForSeconds(2f); 
         SceneManager.LoadScene("GameScene");
     }
 }
