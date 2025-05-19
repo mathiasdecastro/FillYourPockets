@@ -9,7 +9,7 @@ public class Arrow : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             EnemyCombat enemy = other.GetComponent<EnemyCombat>();
-            
+
             if (enemy != null)
                 enemy.TakeDamage(damage);
 
@@ -24,5 +24,7 @@ public class Arrow : MonoBehaviour
 
             Destroy(gameObject);
         }
+        else if (other.CompareTag("Fence"))
+            Destroy(gameObject);
     }
 }

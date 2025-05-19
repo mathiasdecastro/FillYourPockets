@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     private bool hasMoved = false;
     private Animator animator;
     private Vector2 targetPosition;
+    private List<Vector2> blockedPositions = new List<Vector2>();
     private Vector2[] directions = new Vector2[]
     {
         new Vector2(1, 0.5f),
@@ -28,6 +29,13 @@ public class PlayerMovement : MonoBehaviour
     {
         targetPosition = transform.position;
         animator = GetComponent<Animator>();
+        GameObject[] fences = GameObject.FindGameObjectsWithTag("Fence");
+
+        foreach (GameObject fence in fences)
+        {
+            Vector2 fencePos = (Vector2)fence.transform.position;
+            blockedPositions.Add(fencePos);
+        }
     }
 
     void Update()
@@ -47,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
                     Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     Vector2 nextPos = ConvertToGrid(mousePos);
 
-                    if (IsAdjacent(targetPosition, nextPos) && IsWalkable(mousePos))
+                    if (IsAdjacent(targetPosition, nextPos) && IsWalkable(mousePos) && !blockedPositions.Contains(nextPos))
                     {
                         animator.SetBool("Walk", true);
                         targetPosition = nextPos;

@@ -9,14 +9,25 @@ public class Potion : MonoBehaviour
     public LayerMask damageLayer;
 
     private Animator animator;
+    private List<Vector2> blockedPositions = new List<Vector2>();
 
     public void Awake()
     {
         animator = GetComponent<Animator>();
+        GameObject[] fences = GameObject.FindGameObjectsWithTag("Fence");
+
+        foreach (GameObject fence in fences)
+        {
+            Vector2 fencePos = (Vector2)fence.transform.position;
+            blockedPositions.Add(fencePos);
+        }
     }
 
     public void ExplodeAt(Vector2 targetPosition)
     {
+        if (blockedPositions.Contains(targetPosition))
+            return;
+
         transform.position = targetPosition;
         StartCoroutine(Explode(targetPosition));
     }

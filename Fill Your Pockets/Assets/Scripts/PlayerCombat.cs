@@ -5,6 +5,7 @@ public class PlayerCombat : MonoBehaviour
     public float health = 100f;
     public float arrowSpeed = 20f;
     public float throwingDistance = 3f;
+    public float stickDamage = 10f;
     public GameObject arrowPrefab;
     public GameObject potionPrefab;
     public Transform shootPoint;
@@ -12,6 +13,17 @@ public class PlayerCombat : MonoBehaviour
 
     private Animator animator;
     private Vector2 direction;
+    private Vector2[] directions = new Vector2[]
+    {
+        new Vector2(1, 0.5f),
+        new Vector2(-1, -0.5f),
+        new Vector2(1, -0.5f),
+        new Vector2(-1, 0.5f),
+        new Vector2(2, 0),
+        new Vector2(-2, 0),
+        new Vector2(0, 1),
+        new Vector2(0, -1)
+    };
 
     void Start()
     {
@@ -37,6 +49,15 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    public void StickAttackButton()
+    {
+        if (tm.stage == StageType.PlayerAttack && !tm.isGameOver)
+        {
+            animator.SetTrigger("Stick");
+            tm.EndTurn();
+        }
+    }
+
     public void TakeDamage(float damage)
     {
         health -= damage;
@@ -49,7 +70,7 @@ public class PlayerCombat : MonoBehaviour
     {
         GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
         Rigidbody2D rb = arrow.GetComponent<Rigidbody2D>();
-            
+
         if (rb != null)
         {
             Vector2 isoDirection = new Vector2(direction.x, direction.y).normalized;
@@ -63,7 +84,22 @@ public class PlayerCombat : MonoBehaviour
     {
         Vector2 targetPos = (Vector2)transform.position + direction * throwingDistance;
         GameObject potion = Instantiate(potionPrefab, transform.position, Quaternion.identity);
-        
+
         potion.GetComponent<Potion>().ExplodeAt(targetPos);
+    }
+
+    public void StickAttck()
+    {
+        Vector2 enemyPos = GameObject.FindWithTag("Enemy").transform.position;
+        Vector2 pos = (Vector2)transform.position;
+
+        foreach (Vector2 dir in directions)
+        {
+            if (enemyPos == pos + dir)
+            {
+                GameObject.FindWithTag("Enemy").GetComponent<EnemyCombat>().TakeDamage(stickDamage);
+                break;
+            }
+        }
     }
 }

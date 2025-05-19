@@ -1,9 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class EnemyMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public TurnManager tm;
+    public Tilemap tilemap;
+    public List<Sprite> nonWalkableTiles = new List<Sprite>();
     public Vector2[] directions = new Vector2[]
     {
         new Vector2(1, 0.5f),
@@ -20,10 +24,18 @@ public class EnemyMovement : MonoBehaviour
     private bool hasMoved = false;
     private Transform target;
     private Vector2 moveTarget;
+    private List<Vector2> blockedPositions = new List<Vector2>();
 
     void Start()
     {
         target = GameObject.FindWithTag("Player").transform;
+        GameObject[] fences = GameObject.FindGameObjectsWithTag("Fence");
+
+        foreach (GameObject fence in fences)
+        {
+            Vector2 fencePos = (Vector2)fence.transform.position;
+            blockedPositions.Add(fencePos);
+        }
     }
 
     void Update()
@@ -52,12 +64,16 @@ public class EnemyMovement : MonoBehaviour
         Vector2 targetPos = target.position;
         Vector2 currentPos = transform.position;
         Vector2 bestMove = currentPos;
-        
+
         float minDist = Vector2.Distance(currentPos, targetPos);
 
         foreach (Vector2 dir in directions)
         {
             Vector2 nextMove = currentPos + dir;
+
+            if (blockedPositions.Contains(nextMove))
+                continue;
+
             float dist = Vector2.Distance(nextMove, targetPos);
 
             if (dist < minDist)
