@@ -31,35 +31,39 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Update()
+{
+    if (tm.stage == StageType.PlayerMoveFirst || tm.stage == StageType.PlayerMoveSecond && !tm.isGameOver)
     {
-        if (tm.stage == StageType.PlayerMoveFirst || tm.stage == StageType.PlayerMoveSecond && !tm.isGameOver)
+        if ((Vector2)transform.position == targetPosition)
         {
-            if ((Vector2)transform.position == targetPosition)
+            animator.SetBool("Walk", false); 
+
+            if (hasMoved)
             {
-                if (hasMoved)
-                {
-                    tm.EndTurn();
-                    hasMoved = false;
-                }
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    Vector2 nextPos = ConvertToGrid(mousePos);
-
-                    if (IsAdjacent(targetPosition, nextPos) && IsWalkable(mousePos))
-                    {
-                        animator.SetBool("Walk", true);
-                        targetPosition = nextPos;
-                        hasMoved = true;
-                    }
-                }
+                tm.EndTurn();
+                hasMoved = false;
             }
 
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 nextPos = ConvertToGrid(mousePos);
+
+                if (IsAdjacent(targetPosition, nextPos) && IsWalkable(mousePos))
+                {
+                    animator.SetBool("Walk", true); 
+                    targetPosition = nextPos;
+                    hasMoved = true;
+                }
+            }
+        }
+        else
+        {
             transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-            animator.SetBool("Walk", false);
         }
     }
+}
+
 
     private Vector2 ConvertToGrid(Vector2 input)
     {

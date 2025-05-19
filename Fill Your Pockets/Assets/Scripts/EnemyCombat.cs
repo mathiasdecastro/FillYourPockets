@@ -24,7 +24,7 @@ public class EnemyCombat : MonoBehaviour
             {
                 AttackPlayer();
                 hasAttacked = true;
-            }   
+            }
 
             tm.EndTurn();
         }
