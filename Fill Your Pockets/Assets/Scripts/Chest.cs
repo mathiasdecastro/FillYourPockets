@@ -1,12 +1,20 @@
 using UnityEngine;
 
+[System.Serializable]
+public class ChestData
+{
+    public int gold;
+
+    public ChestData(int gold) => this.gold = gold;
+}
+
 public class Chest : MonoBehaviour
 {
     [SerializeField] private int goldPerInterval = 5;
     [SerializeField] private float intervalSeconds = 3f;
 
     private float timer = 0f;
-    private int storedGold = 0;
+    public int storedGold = 0;
 
     void Update()
     {
@@ -21,9 +29,8 @@ public class Chest : MonoBehaviour
 
     public int GetGold()
     {
-        int gold = storedGold;
         Destroy(gameObject);
 
-        return gold;
+        return storedGold;
     }
 }

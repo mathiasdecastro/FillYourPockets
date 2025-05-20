@@ -1,5 +1,13 @@
 using UnityEngine;
 
+[System.Serializable]
+public class TurretData
+{
+    private Vector2 position;
+
+    public TurretData(Vector2 position) => this.position = position;
+}
+
 public class TowerController : MonoBehaviour
 {
     [Header("Tower Settings")]
@@ -12,7 +20,6 @@ public class TowerController : MonoBehaviour
     public TurnManager turnManager;
 
     private bool hasAttacked = false;
-    private Animator animator;
     private Vector2 attackDirection;
     private Transform player;
 
@@ -42,11 +49,7 @@ public class TowerController : MonoBehaviour
         new Vector2(-1, -1.5f),
     };
 
-    void Start()
-    {
-        animator = GetComponent<Animator>();
-        player = GameObject.Find("Player").transform;
-    }
+    void Start() => player = GameObject.Find("Player").transform;
 
     void Update()
     {
@@ -65,10 +68,6 @@ public class TowerController : MonoBehaviour
             hasAttacked = false;
     }
 
-    /// <summary>
-    /// Checks if the player is within one of the defined attack directions.
-    /// </summary>
-    /// <returns>True if the player is in range, false otherwise.</returns>
     bool IsPlayerInRange()
     {
         Vector2 playerPos = player.position;
@@ -86,14 +85,11 @@ public class TowerController : MonoBehaviour
         return false;
     }
 
-    /// <summary>
-    /// Instantiates and shoots an arrow in the stored attack direction.
-    /// </summary>
     void ShootArrow()
     {
         GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
         Rigidbody2D rb = arrow.GetComponent<Rigidbody2D>();
-    
+
         if (rb != null)
         {
             Vector2 normalizedDirection = attackDirection.normalized;

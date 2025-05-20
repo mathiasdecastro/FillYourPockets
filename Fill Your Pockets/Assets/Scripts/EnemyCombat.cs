@@ -7,12 +7,6 @@ public class EnemyCombat : MonoBehaviour
     public TurnManager tm;
 
     private bool hasAttacked = false;
-    private Animator animator;
-
-    void Start()
-    {
-        animator = GetComponent<Animator>();
-    }
 
     void Update()
     {
@@ -20,15 +14,15 @@ public class EnemyCombat : MonoBehaviour
         {
             if (IsPlayerAround())
             {
-                AttackPlayer();
+                PlayerCombat player = GameObject.Find("Player").GetComponent<PlayerCombat>();
+                player.TakeDamage(damage);
                 hasAttacked = true;
             }   
 
             tm.EndTurn();
         }
 
-        if (tm.stage != StageType.EnemyAttack)
-            hasAttacked = false;
+        if (tm.stage != StageType.EnemyAttack) hasAttacked = false;
     }
 
     public void TakeDamage(float damage)
@@ -36,8 +30,7 @@ public class EnemyCombat : MonoBehaviour
         health -= damage;
         Debug.Log("Health : " + health);
         
-        if (health <= 0)
-            Destroy(gameObject);
+        if (health <= 0) Destroy(gameObject);
     }
 
     bool IsPlayerAround()
@@ -46,17 +39,8 @@ public class EnemyCombat : MonoBehaviour
         Vector2 playerPos = GameObject.Find("Player").transform.position;
 
         foreach (Vector2 dir in Directions.Isometric)
-        {
-            if (playerPos == pos + dir)
-                return true;
-        }
+            if (playerPos == pos + dir) return true;
 
         return false;
-    }
-
-    void AttackPlayer()
-    {
-        PlayerCombat player = GameObject.Find("Player").GetComponent<PlayerCombat>();
-        player.TakeDamage(damage);
     }
 }

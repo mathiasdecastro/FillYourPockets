@@ -1,5 +1,13 @@
 using UnityEngine;
 
+[System.Serializable]
+public class TrapData
+{
+    private Vector2 position;
+
+    public TrapData(Vector2 position) => this.position = position;
+}
+
 public class TrapController : MonoBehaviour
 {
     public float damage = 20f;

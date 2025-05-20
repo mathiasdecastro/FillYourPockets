@@ -1,11 +1,10 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
 public GameObject movementPanel; 
-    public GameObject attackPanel;   
+    public GameObject attackPanel;
     private CanvasGroup movementGroup;
     private CanvasGroup attackGroup;
 

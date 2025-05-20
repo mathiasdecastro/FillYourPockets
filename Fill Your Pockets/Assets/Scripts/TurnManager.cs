@@ -13,6 +13,23 @@ public enum StageType
     EndTurn
 }
 
+[System.Serializable]
+public class TurnData
+{
+    private StageType stage;
+    private int currentTurn;
+    private int maxTurns;
+    private bool isGameOver;
+
+    public TurnData(TurnManager turnManager)
+    {
+        stage = turnManager.stage;
+        currentTurn = turnManager.currentTurn;
+        maxTurns = turnManager.maxTurns;
+        isGameOver = turnManager.isGameOver;
+    }
+}
+
 public class TurnManager : MonoBehaviour
 {
     public int maxTurns = 3;
@@ -102,7 +119,7 @@ public class TurnManager : MonoBehaviour
             currentTurn++;
             textTurns.text = (maxTurns - currentTurn).ToString();
         }
-        
+
         if (currentTurn >= maxTurns)
             isGameOver = true;
 
