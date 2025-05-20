@@ -13,17 +13,6 @@ public class PlayerCombat : MonoBehaviour
 
     private Animator animator;
     private Vector2 direction;
-    private Vector2[] directions = new Vector2[]
-    {
-        new Vector2(1, 0.5f),
-        new Vector2(-1, -0.5f),
-        new Vector2(1, -0.5f),
-        new Vector2(-1, 0.5f),
-        new Vector2(2, 0),
-        new Vector2(-2, 0),
-        new Vector2(0, 1),
-        new Vector2(0, -1)
-    };
 
     void Start()
     {
@@ -93,7 +82,7 @@ public class PlayerCombat : MonoBehaviour
         Vector2 enemyPos = GameObject.FindWithTag("Enemy").transform.position;
         Vector2 pos = (Vector2)transform.position;
 
-        foreach (Vector2 dir in directions)
+        foreach (Vector2 dir in Directions.Isometric)
         {
             if (enemyPos == pos + dir)
             {

@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class Chest : MonoBehaviour
 {
-    public int goldPerInterval = 5;
-    public float intervalSeconds = 3f;
+    [SerializeField] private int goldPerInterval = 5;
+    [SerializeField] private float intervalSeconds = 3f;
 
     private float timer = 0f;
-    private int storeGold = 0;
+    private int storedGold = 0;
 
     void Update()
     {
@@ -14,21 +14,16 @@ public class Chest : MonoBehaviour
 
         if (timer >= intervalSeconds)
         {
-            storeGold += goldPerInterval;
+            storedGold += goldPerInterval;
             timer = 0f;
         }
     }
 
     public int GetGold()
     {
-        int goldToGive = storeGold;
+        int gold = storedGold;
         Destroy(gameObject);
 
-       return goldToGive;
-    }
-
-    public int getStoreGold()
-    {
-        return storeGold;
+        return gold;
     }
 }

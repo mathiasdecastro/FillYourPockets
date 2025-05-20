@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerGold : MonoBehaviour
 {
-    public int gold = 0;
+    private int gold = 0;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -13,15 +13,9 @@ public class PlayerController : MonoBehaviour
             if (chest != null)
             {
                 int collectedGold = chest.GetGold();
-                AddGold(collectedGold);
+                gold += collectedGold;
                 Debug.Log("Tu as récupéré : " + collectedGold);
             }
         }
-    }
-
-    public void AddGold(int amount)
-    {
-        gold += amount;
-        Debug.Log("Gold : " + gold);
     }
 }

@@ -8,12 +8,10 @@ public class EnemyCombat : MonoBehaviour
 
     private bool hasAttacked = false;
     private Animator animator;
-    private EnemyMovement em;
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        em = GetComponent<EnemyMovement>();
     }
 
     void Update()
@@ -47,7 +45,7 @@ public class EnemyCombat : MonoBehaviour
         Vector2 pos = (Vector2)transform.position;
         Vector2 playerPos = GameObject.Find("Player").transform.position;
 
-        foreach (Vector2 dir in em.directions)
+        foreach (Vector2 dir in Directions.Isometric)
         {
             if (playerPos == pos + dir)
                 return true;
