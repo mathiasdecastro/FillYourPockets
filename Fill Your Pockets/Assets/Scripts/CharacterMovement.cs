@@ -20,10 +20,12 @@ public static class Directions
 public abstract class CharacterMovement : MonoBehaviour
 {
     [SerializeField] protected float moveSpeed = 5f;
+    [SerializeField] protected bool isPlayer = false;
     [SerializeField] protected Tilemap tilemap;
     [SerializeField] protected TurnManager turnManager;
     [SerializeField] protected List<Sprite> nonWalkableTiles = new List<Sprite>();
-
+    [SerializeField] protected Sprite endSprite;
+        
     protected List<Vector2> blockedPositions = new List<Vector2>();
 
     protected virtual void Start()
@@ -58,8 +60,11 @@ public abstract class CharacterMovement : MonoBehaviour
         if (tile is Tile tileTyped)
         {
             Sprite sprite = tileTyped.sprite;
-
+            
             if (nonWalkableTiles.Contains(sprite)) return false;
+            
+            if (isPlayer)
+                if (sprite == endSprite) Debug.Log("End reached, thank's for playing");
         }
 
         return true;

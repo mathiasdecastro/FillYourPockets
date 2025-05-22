@@ -16,10 +16,10 @@ public enum StageType
 [System.Serializable]
 public class TurnData
 {
-    private StageType stage;
-    private int currentTurn;
-    private int maxTurns;
-    private bool isGameOver;
+    public StageType stage;
+    public int currentTurn;
+    public int maxTurns;
+    public bool isGameOver;
 
     public TurnData(TurnManager turnManager)
     {

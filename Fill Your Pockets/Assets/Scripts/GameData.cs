@@ -6,17 +6,17 @@ public class GameData
     public PlayerData playerData;
     public ChestData chestData;
     public TurnData turnData;
-    public List<EnemyData> enemyDatas;
-    public List<TurretData> turretDatas;
-    public List<TrapData> trapDatas;
+    public EnemyData enemyData;
+    public TurretData turretData;
+    public TrapData trapData;
 
-    public GameData(PlayerData playerData, ChestData chestData, TurnData turnData, List<EnemyData> enemyDatas, List<TurretData> turretDatas, List<TrapData> trapDatas)
+    public GameData(PlayerData playerData, ChestData chestData, TurnData turnData, EnemyData enemyData, TurretData turretData, TrapData trapData)
     {
         this.playerData = playerData;
         this.chestData = chestData;
         this.turnData = turnData;
-        this.enemyDatas = enemyDatas;
-        this.turretDatas = turretDatas;
-        this.trapDatas = trapDatas;
+        this.enemyData = enemyData;
+        this.turretData = turretData;
+        this.trapData = trapData;
     }
 }

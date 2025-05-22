@@ -24,13 +24,32 @@ public class SaveTest : MonoBehaviour
         EnemyData enemyData = new EnemyData(enemyCombat.health, (Vector2)enemyMovement.transform.position);
         PlayerData playerData = new PlayerData(playerGold.gold, playerCombat.health, (Vector2)playerMovement.transform.position);
 
-        List<EnemyData> enemyDatas = new List<EnemyData>() { enemyData };
-        List<TurretData> turretDatas = new List<TurretData>() { turretData };
-        List<TrapData> trapDatas = new List<TrapData>() { trapData };
-
-        GameData gameData = new GameData(playerData, chestData, turnData, enemyDatas, turretDatas, trapDatas);
-
+        GameData gameData = new GameData(playerData, chestData, turnData, enemyData, turretData, trapData);
+        
         if (Input.GetKeyDown(KeyCode.S))
             SaveManager.Save(gameData);
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            GameData newData = SaveManager.Load();
+
+            playerCombat.health = newData.playerData.health;
+            playerGold.gold = newData.playerData.gold;
+            playerMovement.transform.position = (Vector2)newData.playerData.position;
+            
+            enemyCombat.health = newData.enemyData.health;
+            enemyMovement.transform.position = (Vector2)newData.enemyData.position;
+            
+            chest.storedGold = newData.chestData.gold;
+
+            turnManager.currentTurn = newData.turnData.currentTurn;
+            turnManager.isGameOver = newData.turnData.isGameOver;
+            turnManager.maxTurns = newData.turnData.maxTurns;
+            turnManager.stage = newData.turnData.stage;
+            
+            turret.transform.position = (Vector2)newData.turretData.position;
+            
+            trap.transform.position = (Vector2)newData.trapData.position;
+        }
     }
 }

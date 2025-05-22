@@ -3,7 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public class TurretData
 {
-    private Vector2 position;
+    public Vector2 position;
 
     public TurretData(Vector2 position) => this.position = position;
 }
