@@ -17,7 +17,7 @@ public class EnemyCombat : MonoBehaviour
                 PlayerCombat player = GameObject.Find("Player").GetComponent<PlayerCombat>();
                 player.TakeDamage(damage);
                 hasAttacked = true;
-            }   
+            }
 
             tm.EndTurn();
         }

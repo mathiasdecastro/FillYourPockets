@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using TMPro;
 public class PlayerCombat : MonoBehaviour
 {
     public float health = 100f;
@@ -11,6 +11,7 @@ public class PlayerCombat : MonoBehaviour
     public Transform shootPoint;
     public TurnManager tm;
 
+    private TextMeshProUGUI healthText;
     private Animator animator;
     private Vector2 direction;
 
@@ -18,6 +19,8 @@ public class PlayerCombat : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         direction = new Vector2(1, -0.5f);
+        healthText = GameObject.Find("HPText").GetComponent<TextMeshProUGUI>();
+        healthText.text = health.ToString();
     }
 
     public void ShootArrowButton()
@@ -50,6 +53,8 @@ public class PlayerCombat : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
+        Debug.Log("Je prend des degats");
+        healthText.text = health.ToString();
 
         if (health <= 0)
             Destroy(gameObject);

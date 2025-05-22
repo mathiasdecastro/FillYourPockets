@@ -4,8 +4,12 @@ using System.Collections;
 
 public class MainMenuController : MonoBehaviour
 {
-    public GameObject tutorialPopup; 
-    public GameObject tutorial; 
+    public GameObject tutorialPopup;
+    public GameObject tutorial;
+
+    public Image fadeOverlay;
+    public float fadeSpeed = 1.5f;
+
 
     private void Start() => tutorialPopup.SetActive(false);
 
@@ -25,7 +29,9 @@ public class MainMenuController : MonoBehaviour
 
     public IEnumerator EndTutorialAndLoadGameScene()
     {
-        yield return new WaitForSeconds(2f); 
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene("GameScene");
     }
 }
+
+
