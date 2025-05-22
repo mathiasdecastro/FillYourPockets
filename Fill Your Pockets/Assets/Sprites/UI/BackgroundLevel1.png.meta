@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6d82378d08d4c934ba1075647af75612
+guid: 9d9eac4a4e571d74ba4fd5f9fe98c0e5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4579934600465699162
-    second: Grog2_0
+      213: -333027939303893406
+    second: BackgroundLevel1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Grog2_0
+      name: BackgroundLevel1_0
       rect:
         serializedVersion: 2
-        x: 65
-        y: 19
-        width: 835
-        height: 820
+        x: 0
+        y: 0
+        width: 1536
+        height: 1024
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6aea8b41fbdc070c0800000000000000
-      internalID: -4579934600465699162
+      spriteID: 266d2898ad8d06bf0800000000000000
+      internalID: -333027939303893406
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Grog2_0: -4579934600465699162
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
