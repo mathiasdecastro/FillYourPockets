@@ -6,6 +6,10 @@ public class PlayerGold : MonoBehaviour
     public int gold = 0;
     public TextMeshPro goldText;
 
+    void Start()
+    {
+        
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Chest"))
@@ -16,6 +20,7 @@ public class PlayerGold : MonoBehaviour
             {
                 int collectedGold = chest.GetGold();
                 gold += collectedGold;
+                goldText.text = goldText.ToString();
                 Debug.Log("Tu as récupéré : " + collectedGold);
             }
         }
