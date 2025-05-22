@@ -34,7 +34,7 @@ public abstract class CharacterMovement : MonoBehaviour
 
         foreach (GameObject fence in fences)
         {
-            Vector2 fencePos = (Vector2)fence.transform.position;
+            Vector2 fencePos = new Vector2(fence.transform.position.x, fence.transform.position.y - 1);
             blockedPositions.Add(fencePos);
         }
     }

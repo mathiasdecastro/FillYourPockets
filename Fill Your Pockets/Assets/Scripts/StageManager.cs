@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
-public GameObject movementPanel; 
+    public GameObject movementPanel; 
     public GameObject attackPanel;
     private CanvasGroup movementGroup;
     private CanvasGroup attackGroup;

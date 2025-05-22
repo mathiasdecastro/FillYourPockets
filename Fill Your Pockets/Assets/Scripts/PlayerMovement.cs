@@ -1,11 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : CharacterMovement
 {
+    [SerializeField] private GameObject highlightPrefab;
+    
     private bool hasMoved = false;
     private Animator animator;
     private Vector2 targetPosition;
-
+    private List<GameObject> _currentHighlights = new List<GameObject>();
+    
     protected override void Start()
     {
         base.Start();
@@ -21,8 +25,12 @@ public class PlayerMovement : CharacterMovement
             {
                 animator.SetBool("Walk", false); 
 
+                if (!hasMoved && _currentHighlights.Count == 0)
+                    ShowAvailableMoves();
+                
                 if (hasMoved)
                 {
+                    ClearHighlight();
                     turnManager.EndTurn();
                     hasMoved = false;
                 }
@@ -39,9 +47,9 @@ public class PlayerMovement : CharacterMovement
                             hasMoved = true;
                         }
                 }
-
-                transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             }
+            
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
     }
 
@@ -56,5 +64,31 @@ public class PlayerMovement : CharacterMovement
             y += 1f;
  
         return new Vector2(x, y);
+    }
+
+    private void ShowAvailableMoves()
+    {
+        ClearHighlight();
+
+        var pos = new Vector2(targetPosition.x, targetPosition.y - 1);
+        
+        foreach (var dir in Directions.Isometric)
+        {
+            var checkPos = pos + dir;
+            
+            if (IsWalkable(checkPos) && !blockedPositions.Contains(checkPos))
+            {
+                GameObject highlight = Instantiate(highlightPrefab, checkPos, Quaternion.identity);
+                _currentHighlights.Add(highlight);
+            }
+        }
+    }
+
+    private void ClearHighlight()
+    {
+        foreach (var obj in _currentHighlights)
+            Destroy(obj);
+        
+        _currentHighlights.Clear();
     }
 }

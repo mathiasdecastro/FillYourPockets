@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SaveTest : MonoBehaviour
@@ -21,6 +20,7 @@ public class SaveTest : MonoBehaviour
         TurretData turretData = new TurretData((Vector2)turret.transform.position);
         TrapData trapData = new TrapData((Vector2)trap.transform.position);
         TurnData turnData = new TurnData(turnManager);
+        
         EnemyData enemyData = new EnemyData(enemyCombat.health, (Vector2)enemyMovement.transform.position);
         PlayerData playerData = new PlayerData(playerGold.gold, playerCombat.health, (Vector2)playerMovement.transform.position);
 
