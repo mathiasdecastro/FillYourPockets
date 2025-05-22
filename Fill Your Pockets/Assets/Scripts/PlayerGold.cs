@@ -1,5 +1,5 @@
 using UnityEngine;
-using TMPRO;
+using TMPro;
 
 public class PlayerGold : MonoBehaviour
 {
