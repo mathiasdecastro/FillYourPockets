@@ -21,11 +21,13 @@ public class SceneController : MonoBehaviour
 
     public void LoadMenuScene()
     {
+        Debug.Log("Menu");
         SceneManager.LoadScene("MenuScene");
     }
 
     public void LoadGameScene()
     {
+        Debug.Log("Quit Game");
         SceneManager.LoadScene("GameScene");
     }
 
@@ -40,8 +42,4 @@ public class SceneController : MonoBehaviour
         Application.Quit();
     }
 
-    public void LoadScene(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
-    }
 }
