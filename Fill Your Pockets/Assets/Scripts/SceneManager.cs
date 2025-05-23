@@ -27,7 +27,7 @@ public class SceneController : MonoBehaviour
 
     public void LoadGameScene()
     {
-        Debug.Log("Quit Game");
+        Debug.Log("Qdfeqgrgdfgbergdfgf");
         SceneManager.LoadScene("GameScene");
     }
 

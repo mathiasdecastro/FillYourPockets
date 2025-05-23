@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public static class Directions
@@ -23,9 +24,10 @@ public abstract class CharacterMovement : MonoBehaviour
     [SerializeField] protected bool isPlayer = false;
     [SerializeField] protected Tilemap tilemap;
     [SerializeField] protected TurnManager turnManager;
+    [SerializeField] protected PlayerGold PlayerGold;
     [SerializeField] protected List<Sprite> nonWalkableTiles = new List<Sprite>();
     [SerializeField] protected Sprite endSprite;
-        
+
     protected List<Vector2> blockedPositions = new List<Vector2>();
 
     protected virtual void Start()
@@ -60,13 +62,31 @@ public abstract class CharacterMovement : MonoBehaviour
         if (tile is Tile tileTyped)
         {
             Sprite sprite = tileTyped.sprite;
-            
+
             if (nonWalkableTiles.Contains(sprite)) return false;
-            
-            if (isPlayer)
-                if (sprite == endSprite) Debug.Log("End reached, thank's for playing");
         }
 
         return true;
+    }
+
+    protected void IsEnd(Vector2 pos)
+    {
+        Vector3 worldPos = new Vector3(pos.x, pos.y, 0);
+        Vector3Int cell = tilemap.WorldToCell(worldPos);
+        TileBase tile = tilemap.GetTile(cell);
+
+        if (tile is Tile tileTyped)
+        {
+            Sprite sprite = tileTyped.sprite;
+
+            if (isPlayer)
+            {
+                if (sprite == endSprite)
+                {
+                    turnManager.hasWon = true;
+                    SceneManager.LoadScene("LevelTransition");
+                }
+            }
+        }
     }
 }

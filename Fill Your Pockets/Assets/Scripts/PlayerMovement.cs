@@ -23,11 +23,11 @@ public class PlayerMovement : CharacterMovement
         {
             if ((Vector2)transform.position == targetPosition)
             {
-                animator.SetBool("Walk", false); 
+                animator.SetBool("Walk", false);
 
                 if (!hasMoved && _currentHighlights.Count == 0)
                     ShowAvailableMoves();
-                
+
                 if (hasMoved)
                 {
                     ClearHighlight();
@@ -39,16 +39,17 @@ public class PlayerMovement : CharacterMovement
                 {
                     Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     Vector2 nextPos = ConvertToGrid(mousePos);
+                    IsEnd(mousePos);
 
-                        if (IsAdjacent(targetPosition, nextPos) && IsWalkable(mousePos) && !blockedPositions.Contains(nextPos))
-                        {
-                            animator.SetBool("Walk", true);
-                            targetPosition = nextPos;
-                            hasMoved = true;
-                        }
+                    if (IsAdjacent(targetPosition, nextPos) && IsWalkable(mousePos) && !blockedPositions.Contains(nextPos))
+                    {
+                        animator.SetBool("Walk", true);
+                        targetPosition = nextPos;
+                        hasMoved = true;
+                    }
                 }
             }
-            
+
             transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
     }

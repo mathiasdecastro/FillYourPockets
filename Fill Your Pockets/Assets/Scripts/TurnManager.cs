@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum StageType
 {
@@ -36,6 +37,7 @@ public class TurnManager : MonoBehaviour
     public int currentTurn = 0;
     public StageType stage;
     public bool isGameOver = false;
+    public bool hasWon = false;
     public Sprite playerMoveSprite;
     public Sprite playerAttackSprite;
     public Sprite enemyMoveSprite;
@@ -110,9 +112,17 @@ public class TurnManager : MonoBehaviour
                 break;
         }
     }
+    
 
     public void EndTurn()
     {
+
+        if (hasWon)
+        {
+            isGameOver = true;
+            SceneManager.LoadScene("LevelTransition");
+        }
+        
         if (stage == StageType.EndTurn && !isGameOver)
         {
             Debug.Log("Tour : " + (currentTurn + 1) + " Terminé.");
@@ -120,8 +130,11 @@ public class TurnManager : MonoBehaviour
             textTurns.text = (maxTurns - currentTurn).ToString();
         }
 
-        if (currentTurn >= maxTurns)
+        if (currentTurn >= maxTurns && !hasWon)
+        {
             isGameOver = true;
+            SceneManager.LoadScene("GameOverScene");
+        }
 
         NextStage();
     }
