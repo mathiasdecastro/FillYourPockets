@@ -248,6 +248,8 @@ MonoBehaviour:
     height: 294.4
   m_MinSize: {x: 202, y: 226}
   m_MaxSize: {x: 4002, y: 4026}
+  m_MinSize: {x: 202, y: 226}
+  m_MaxSize: {x: 4002, y: 4026}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -425,7 +427,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 79.200005
+    y: 24
     width: 951
     height: 488.40002
   m_SerializedDataModeController:
@@ -1206,8 +1208,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 952
-    y: 79.200005
+    x: 1
+    y: 24
     width: 250.80005
     height: 268.4
   m_SerializedDataModeController:
@@ -1272,8 +1274,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 952
-    y: 373.6
+    x: 1
+    y: 318.4
     width: 250.80005
     height: 194.00003
   m_SerializedDataModeController:
@@ -1427,7 +1429,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 593.60004
+    y: 538.4
     width: 1203.8
     height: 176.39996
   m_SerializedDataModeController:
@@ -1462,8 +1464,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1204.8
-    y: 79.200005
+    x: 1205.8
+    y: 24
     width: 330.19995
     height: 690.8
   m_SerializedDataModeController:

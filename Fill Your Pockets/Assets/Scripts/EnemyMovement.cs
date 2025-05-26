@@ -7,6 +7,7 @@ public class EnemyMovement : CharacterMovement
     private Transform target;
     private Vector2 moveTarget;
 
+    public Animator animator;
 
     protected override void Start()
     {
@@ -18,6 +19,7 @@ public class EnemyMovement : CharacterMovement
     {
         if ((turnManager.stage == StageType.EnemyMoveFirst || turnManager.stage == StageType.EnemyMoveSecond) && !hasMoved && !turnManager.isGameOver)
         {
+            animator.SetBool("Walking", true);
             MoveToTarget();
             hasMoved = true;
         }
@@ -30,6 +32,7 @@ public class EnemyMovement : CharacterMovement
             {
                 isMoving = false;
                 hasMoved = false;
+                animator.SetBool("Walking", false);
                 turnManager.EndTurn();
             }
         }
