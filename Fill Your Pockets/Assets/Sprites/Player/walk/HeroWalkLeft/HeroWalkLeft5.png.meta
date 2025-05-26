@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 0fb2b97a38583bb48a933313c20a7e53
+guid: 2dfa1c5d6617b7344b6f0daaf9300708
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8942851146927397729
-    second: highlight2_0
+      213: -8197139350789888417
+    second: HeroWalkLeft5_0
+  - first:
+      213: 606717724093002777
+    second: HeroWalkLeft5_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +103,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: highlight2_0
+      name: HeroWalkLeft5_0
       rect:
         serializedVersion: 2
-        x: 11
-        y: 109
-        width: 235
-        height: 119
+        x: 169
+        y: 34
+        width: 662
+        height: 862
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +118,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 16b5dc3acb36b1c70800000000000000
-      internalID: 8942851146927397729
+      spriteID: f56eac5d039ed3e80800000000000000
+      internalID: -8197139350789888417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HeroWalkLeft5_1
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 73
+        width: 145
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9143f773e8e7b6800800000000000000
+      internalID: 606717724093002777
       vertices: []
       indices: 
       edges: []
@@ -134,8 +159,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      highlight2_0: 8942851146927397729
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

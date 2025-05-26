@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0fb2b97a38583bb48a933313c20a7e53
+guid: 320a9a47d42251a4d97a836c490746c8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8942851146927397729
-    second: highlight2_0
+      213: -6762485021287052644
+    second: HeroWalkBack2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: highlight2_0
+      name: HeroWalkBack2_0
       rect:
         serializedVersion: 2
-        x: 11
-        y: 109
-        width: 235
-        height: 119
+        x: 218
+        y: 85
+        width: 577
+        height: 808
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 16b5dc3acb36b1c70800000000000000
-      internalID: 8942851146927397729
+      spriteID: c9a094bc3b3d622a0800000000000000
+      internalID: -6762485021287052644
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      highlight2_0: 8942851146927397729
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
