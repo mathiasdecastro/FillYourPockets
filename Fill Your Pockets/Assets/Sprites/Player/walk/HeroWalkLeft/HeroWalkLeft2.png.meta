@@ -159,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      HeroWalkLeft2_0: -1323902667913596487
+      HeroWalkLeft2_1: 2186342355156381130
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
