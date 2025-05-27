@@ -2,37 +2,38 @@ using UnityEngine;
 
 public class EnemyMovement : CharacterMovement
 {
-    private bool isMoving = false;
-    private bool hasMoved = false;
-    private Transform target;
-    private Vector2 moveTarget;
-
-    public Animator animator;
-
+    private static readonly int Walking = Animator.StringToHash("Walking");
+    private bool _isMoving = false;
+    private bool _hasMoved = false;
+    private Transform _target;
+    private Vector2 _moveTarget;
+    private Animator _animator;
+    
     protected override void Start()
     {
         base.Start();
-        target = GameObject.FindWithTag("Player").transform;
+        _target = GameObject.FindWithTag("Player").transform;
+        _animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if ((turnManager.stage == StageType.EnemyMoveFirst || turnManager.stage == StageType.EnemyMoveSecond) && !hasMoved && !turnManager.isGameOver)
+        if ((turnManager.stage == StageType.EnemyMoveFirst || turnManager.stage == StageType.EnemyMoveSecond) && !_hasMoved && !turnManager.isGameOver)
         {
-            animator.SetBool("Walking", true);
+            _animator.SetBool("Walking", true);
             MoveToTarget();
-            hasMoved = true;
+            _hasMoved = true;
         }
 
-        if (isMoving)
+        if (_isMoving)
         {
-            transform.position = Vector2.MoveTowards(transform.position, moveTarget, moveSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, _moveTarget, moveSpeed * Time.deltaTime);
 
-            if ((Vector2)transform.position == moveTarget)
+            if ((Vector2)transform.position == _moveTarget)
             {
-                isMoving = false;
-                hasMoved = false;
-                animator.SetBool("Walking", false);
+                _isMoving = false;
+                _hasMoved = false;
+                _animator.SetBool(Walking, false);
                 turnManager.EndTurn();
             }
         }
@@ -40,7 +41,7 @@ public class EnemyMovement : CharacterMovement
 
     void MoveToTarget()
     {
-        Vector2 targetPos = target.position;
+        Vector2 targetPos = _target.position;
         Vector2 currentPos = transform.position;
         Vector2 bestMove = currentPos;
 
@@ -62,7 +63,7 @@ public class EnemyMovement : CharacterMovement
             }
         }
 
-        moveTarget = bestMove;
-        isMoving = true;
+        _moveTarget = bestMove;
+        _isMoving = true;
     }
 }
