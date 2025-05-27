@@ -2,9 +2,8 @@ using UnityEngine;
 
 public class EnemyMovement : CharacterMovement
 {
-    private static readonly int Walking = Animator.StringToHash("Walking");
-    private bool _isMoving = false;
-    private bool _hasMoved = false;
+    private bool _isMoving;
+    private bool _hasMoved;
     private Transform _target;
     private Vector2 _moveTarget;
     private Animator _animator;
@@ -33,7 +32,7 @@ public class EnemyMovement : CharacterMovement
             {
                 _isMoving = false;
                 _hasMoved = false;
-                _animator.SetBool(Walking, false);
+                _animator.SetBool("Walking", false);
                 turnManager.EndTurn();
             }
         }
@@ -51,7 +50,7 @@ public class EnemyMovement : CharacterMovement
         {
             Vector2 nextMove = currentPos + dir;
 
-            if (blockedPositions.Contains(nextMove))
+            if (BlockedPositions.Contains(nextMove))
                 continue;
 
             float dist = Vector2.Distance(nextMove, targetPos);

@@ -5,59 +5,63 @@ public class PlayerMovement : CharacterMovement
 {
     [SerializeField] private GameObject highlightPrefab;
     
-    private bool hasMoved = false;
-    private Animator animator;
-    private Vector2 targetPosition;
-    private List<GameObject> _currentHighlights = new List<GameObject>();
+    private static readonly int Walk = Animator.StringToHash("Walk");
+    private readonly List<GameObject> _currentHighlights = new();
+    
+    private bool _hasMoved;
+    private Animator _animator;
+    private Vector2 _targetPosition;
+    private Camera _camera;
     
     protected override void Start()
     {
         base.Start();
-        targetPosition = transform.position;
-        animator = GetComponent<Animator>();
+        _targetPosition = transform.position;
+        _animator = GetComponent<Animator>();
+        _camera = Camera.main;
     }
 
     private void Update()
     {
-        if (turnManager.stage == StageType.PlayerMoveFirst || turnManager.stage == StageType.PlayerMoveSecond && !turnManager.isGameOver)
+        if (turnManager.stage != StageType.PlayerMoveFirst &&
+            (turnManager.stage != StageType.PlayerMoveSecond || turnManager.isGameOver)) return;
+        
+        if ((Vector2)transform.position == _targetPosition)
         {
-            if ((Vector2)transform.position == targetPosition)
+            _animator.SetBool(Walk, false);
+
+            if (!_hasMoved && _currentHighlights.Count == 0)
+                ShowAvailableMoves();
+
+            if (_hasMoved)
             {
-                animator.SetBool("Walk", false);
-
-                if (!hasMoved && _currentHighlights.Count == 0)
-                    ShowAvailableMoves();
-
-                if (hasMoved)
-                {
-                    ClearHighlight();
-                    turnManager.EndTurn();
-                    hasMoved = false;
-                }
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    Vector2 nextPos = ConvertToGrid(mousePos);
-                    IsEnd(mousePos);
-
-                    if (IsAdjacent(targetPosition, nextPos) && IsWalkable(mousePos) && !blockedPositions.Contains(nextPos))
-                    {
-                        animator.SetBool("Walk", true);
-                        targetPosition = nextPos;
-                        hasMoved = true;
-                    }
-                }
+                ClearHighlight();
+                turnManager.EndTurn();
+                _hasMoved = false;
             }
 
-            transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector2 mousePos = _camera.ScreenToWorldPoint(Input.mousePosition);
+                var nextPos = ConvertToGrid(mousePos);
+                IsEnd(mousePos);
+
+                if (IsAdjacent(_targetPosition, nextPos) && IsWalkable(mousePos) && !BlockedPositions.Contains(nextPos))
+                {
+                    _animator.SetBool(Walk, true);
+                    _targetPosition = nextPos;
+                    _hasMoved = true;
+                }
+            }
         }
+
+        transform.position = Vector2.MoveTowards(transform.position, _targetPosition, moveSpeed * Time.deltaTime);
     }
 
-    private Vector2 ConvertToGrid(Vector2 input)
+    public static Vector2 ConvertToGrid(Vector2 input)
     {
-        float x = Mathf.Round(input.x);
-        float y = Mathf.Round(input.y);
+        var x = Mathf.Round(input.x);
+        var y = Mathf.Round(input.y);
 
         if ((int)x % 2 == 0)
             y += 0.5f;
@@ -71,24 +75,22 @@ public class PlayerMovement : CharacterMovement
     {
         ClearHighlight();
 
-        var pos = new Vector2(targetPosition.x, targetPosition.y - 1);
+        var pos = new Vector2(_targetPosition.x, _targetPosition.y - 1);
         
         foreach (var dir in Directions.Isometric)
         {
             var checkPos = pos + dir;
+
+            if (!IsWalkable(checkPos) || BlockedPositions.Contains(checkPos)) continue;
             
-            if (IsWalkable(checkPos) && !blockedPositions.Contains(checkPos))
-            {
-                GameObject highlight = Instantiate(highlightPrefab, checkPos, Quaternion.identity);
-                _currentHighlights.Add(highlight);
-            }
+            var highlight = Instantiate(highlightPrefab, checkPos, Quaternion.identity);
+            _currentHighlights.Add(highlight);
         }
     }
 
     private void ClearHighlight()
     {
-        foreach (var obj in _currentHighlights)
-            Destroy(obj);
+        foreach (var obj in _currentHighlights) Destroy(obj);
         
         _currentHighlights.Clear();
     }

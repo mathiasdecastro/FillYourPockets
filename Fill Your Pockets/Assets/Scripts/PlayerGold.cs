@@ -3,26 +3,21 @@ using TMPro;
 
 public class PlayerGold : MonoBehaviour
 {
-    public int gold = 0;
-    public TextMeshPro goldText;
-
-    void Start()
-    {
-        
-    }
+    public int gold;
+    public TextMeshProUGUI goldText;
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Chest"))
-        {
-            Chest chest = other.GetComponent<Chest>();
+        if (!other.CompareTag("Chest")) return;
+        
+        var chest = other.GetComponent<Chest>();
 
-            if (chest != null)
-            {
-                int collectedGold = chest.GetGold();
-                gold += collectedGold;
-                goldText.text = goldText.ToString();
-                Debug.Log("Tu as récupéré : " + collectedGold);
-            }
-        }
+        if (!chest) return;
+        
+        var collectedGold = chest.GetGold();
+        gold += collectedGold;
+        goldText.text = goldText.ToString();
+        
+        Debug.Log("You got : " + collectedGold + " golds");
     }
 }

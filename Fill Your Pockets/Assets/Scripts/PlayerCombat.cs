@@ -1,74 +1,107 @@
+using System;
+using System.Globalization;
+using System.Linq;
 using UnityEngine;
 using TMPro;
+
 public class PlayerCombat : MonoBehaviour
 {
     public float health = 100f;
-    public float arrowSpeed = 20f;
-    public float throwingDistance = 3f;
-    public float stickDamage = 10f;
-    public GameObject arrowPrefab;
-    public GameObject potionPrefab;
-    public Transform shootPoint;
-    public TurnManager tm;
+    
+    [SerializeField] private GameObject arrowPrefab;
+    [SerializeField] private GameObject potionPrefab;
+    [SerializeField] private Transform shootPoint;
+    [SerializeField] private TurnManager turnManager;
 
-    private TextMeshProUGUI healthText;
-    private Animator animator;
-    private Vector2 direction;
+    private static readonly int Shoot = Animator.StringToHash("Shoot");
+    private static readonly int Potion = Animator.StringToHash("Potion");
+    private static readonly int Stick = Animator.StringToHash("Stick");
+    
+    private const float StickDamage = 10f;
+    private const float ArrowSpeed = 20f;
+    private const float ThrowingDistance = 3f;
 
-    void Start()
+    private enum PendingAction { None, Shoot, Potion, Stick }
+    
+    private bool _waitingForDirection;
+    private PendingAction _pendingAction;
+    private TextMeshProUGUI _healthText;
+    private Animator _animator;
+    private Vector2 _direction;
+    private Camera _camera;
+
+    private void Start()
     {
-        animator = GetComponent<Animator>();
-        direction = new Vector2(1, -0.5f);
-        healthText = GameObject.Find("HPText").GetComponent<TextMeshProUGUI>();
-        healthText.text = health.ToString();
+        _animator = GetComponent<Animator>();
+        _direction = new Vector2(1, -0.5f);
+        _healthText = GameObject.Find("HPText").GetComponent<TextMeshProUGUI>();
+        _healthText.text = health.ToString(CultureInfo.InvariantCulture);
+        _camera = Camera.main;
     }
 
+    private void Update() 
+    {
+        if (Input.GetMouseButton(0)) DetectTileClick();
+    }
+
+    private void DetectTileClick()
+    {
+        if (!_waitingForDirection) return;
+        
+        Vector2 mouseWorldPos = _camera.ScreenToWorldPoint(Input.mousePosition);
+        var newDirection = PlayerMovement.ConvertToGrid(mouseWorldPos);
+        var playerPos = (Vector2)transform.position;
+        var clickedDirection = newDirection - playerPos;
+
+        if (clickedDirection.x < 0)
+            _direction = clickedDirection.y < 0 ? new Vector2(-1, -0.5f) : new Vector2(-1, 0.5f);
+        else
+            _direction = clickedDirection.y < 0 ? new Vector2(1, -0.5f) : new Vector2(1, 0.5f);
+        
+        ExecutePendingAction();
+    }
+    
     public void ShootArrowButton()
     {
-        if (tm.stage == StageType.PlayerAttack && !tm.isGameOver)
-        {
-            animator.SetTrigger("Shoot");
-            tm.EndTurn();
-        }
+        if (turnManager.stage != StageType.PlayerAttack || turnManager.isGameOver) return;
+        
+        _waitingForDirection = true;
+        _pendingAction = PendingAction.Shoot;
     }
 
     public void ThrowPotionButton()
     {
-        if (tm.stage == StageType.PlayerAttack && !tm.isGameOver)
-        {
-            animator.SetTrigger("Potion");
-            tm.EndTurn();
-        }
+        if (turnManager.stage != StageType.PlayerAttack || turnManager.isGameOver) return;
+        
+        _waitingForDirection = true;
+        _pendingAction = PendingAction.Potion;
     }
 
     public void StickAttackButton()
     {
-        if (tm.stage == StageType.PlayerAttack && !tm.isGameOver)
-        {
-            animator.SetTrigger("Stick");
-            tm.EndTurn();
-        }
+        if (turnManager.stage != StageType.PlayerAttack || turnManager.isGameOver) return;
+       
+        _waitingForDirection = true;
+        _pendingAction = PendingAction.Stick;
     }
 
     public void TakeDamage(float damage)
     {
         health -= damage;
-        Debug.Log("Je prend des degats");
-        healthText.text = health.ToString();
+        _healthText.text = health.ToString(CultureInfo.InvariantCulture);
 
-        if (health <= 0)
-            Destroy(gameObject);
+        if (health <= 0) Destroy(gameObject);
     }
 
     public void ShootArrow()
     {
-        GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
-        Rigidbody2D rb = arrow.GetComponent<Rigidbody2D>();
+        var arrow = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
+        var rb = arrow.GetComponent<Rigidbody2D>();
 
-        if (rb != null)
+        if (rb)
         {
-            Vector2 isoDirection = new Vector2(direction.x, direction.y).normalized;
-            rb.linearVelocity = isoDirection * arrowSpeed;
+            var isoDirection = new Vector2(_direction.x, _direction.y).normalized;
+            rb.linearVelocity = isoDirection * ArrowSpeed;
         }
 
         Destroy(arrow, 2f);
@@ -76,24 +109,44 @@ public class PlayerCombat : MonoBehaviour
 
     public void ThrowPotion()
     {
-        Vector2 targetPos = (Vector2)transform.position + direction * throwingDistance;
-        GameObject potion = Instantiate(potionPrefab, transform.position, Quaternion.identity);
+        var targetPos = (Vector2)transform.position + _direction * ThrowingDistance;
+        var potion = Instantiate(potionPrefab, transform.position, Quaternion.identity);
 
         potion.GetComponent<Potion>().ExplodeAt(targetPos);
     }
 
-    public void StickAttck()
+    public void StickAttack()
     {
         Vector2 enemyPos = GameObject.FindWithTag("Enemy").transform.position;
-        Vector2 pos = (Vector2)transform.position;
+        var pos = (Vector2)transform.position;
 
-        foreach (Vector2 dir in Directions.Isometric)
+        if (Directions.Isometric.Any(dir => enemyPos == pos + dir))
+            GameObject.FindWithTag("Enemy").GetComponent<EnemyCombat>().TakeDamage(StickDamage);
+    }
+
+    private void ExecutePendingAction()
+    {
+        switch (_pendingAction)
         {
-            if (enemyPos == pos + dir)
-            {
-                GameObject.FindWithTag("Enemy").GetComponent<EnemyCombat>().TakeDamage(stickDamage);
+            case PendingAction.Stick:
+                _animator.SetTrigger(Stick);
                 break;
-            }
+            
+            case PendingAction.Potion:
+                _animator.SetTrigger(Potion);
+                break;
+            
+            case PendingAction.Shoot:
+                _animator.SetTrigger(Shoot);
+                break;
+            
+            case PendingAction.None:
+            default:
+                throw new ArgumentOutOfRangeException();
         }
+        
+        _waitingForDirection = false;
+        _pendingAction = PendingAction.None;
+        turnManager.EndTurn();
     }
 }

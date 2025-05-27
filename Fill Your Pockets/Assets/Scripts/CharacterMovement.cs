@@ -1,92 +1,78 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public static class Directions
 {
-    public static readonly Vector2[] Isometric = new Vector2[]
+    public static readonly Vector2[] Isometric =
     {
-        new Vector2(1, 0.5f),
-        new Vector2(-1, -0.5f),
-        new Vector2(1, -0.5f),
-        new Vector2(-1, 0.5f),
-        new Vector2(2, 0),
-        new Vector2(-2, 0),
-        new Vector2(0, 1),
-        new Vector2(0, -1)
+        new(1, 0.5f),
+        new(-1, -0.5f),
+        new(1, -0.5f),
+        new(-1, 0.5f),
     };
 }
 
 public abstract class CharacterMovement : MonoBehaviour
 {
     [SerializeField] protected float moveSpeed = 5f;
-    [SerializeField] protected bool isPlayer = false;
+    [SerializeField] protected bool isPlayer;
     [SerializeField] protected Tilemap tilemap;
     [SerializeField] protected TurnManager turnManager;
-    [SerializeField] protected PlayerGold PlayerGold;
-    [SerializeField] protected List<Sprite> nonWalkableTiles = new List<Sprite>();
+    [SerializeField] protected PlayerGold playerGold;
+    [SerializeField] protected List<Sprite> nonWalkableTiles = new();
     [SerializeField] protected Sprite endSprite;
 
-    protected List<Vector2> blockedPositions = new List<Vector2>();
+    protected readonly List<Vector2> BlockedPositions = new();
 
     protected virtual void Start()
     {
-        GameObject[] fences = GameObject.FindGameObjectsWithTag("Fence");
+        var fences = GameObject.FindGameObjectsWithTag("Fence");
 
-        foreach (GameObject fence in fences)
+        foreach (var fence in fences)
         {
-            Vector2 fencePos = new Vector2(fence.transform.position.x, fence.transform.position.y - 1);
-            blockedPositions.Add(fencePos);
+            var fencePos = new Vector2(fence.transform.position.x, fence.transform.position.y - 1);
+            BlockedPositions.Add(fencePos);
         }
     }
 
-    protected bool IsAdjacent(Vector2 current, Vector2 target)
+    protected static bool IsAdjacent(Vector2 current, Vector2 target)
     {
-        foreach (Vector2 dir in Directions.Isometric)
-        {
-            if (target == current + dir) return true;
-        }
-
-        return false;
+        return Directions.Isometric.Any(dir => target == current + dir);
     }
 
     protected bool IsWalkable(Vector2 pos)
     {
-        Vector3 worldPos = new Vector3(pos.x, pos.y, 0);
-        Vector3Int cell = tilemap.WorldToCell(worldPos);
-        TileBase tile = tilemap.GetTile(cell);
+        var worldPos = new Vector3(pos.x, pos.y, 0);
+        var cell = tilemap.WorldToCell(worldPos);
+        var tile = tilemap.GetTile(cell);
 
-        if (tile == null) return false;
+        if (!tile) return false;
 
-        if (tile is Tile tileTyped)
-        {
-            Sprite sprite = tileTyped.sprite;
+        if (tile is not Tile tileTyped) return true;
+        
+        var sprite = tileTyped.sprite;
 
-            if (nonWalkableTiles.Contains(sprite)) return false;
-        }
-
-        return true;
+        return !nonWalkableTiles.Contains(sprite);
     }
 
     protected void IsEnd(Vector2 pos)
     {
-        Vector3 worldPos = new Vector3(pos.x, pos.y, 0);
-        Vector3Int cell = tilemap.WorldToCell(worldPos);
-        TileBase tile = tilemap.GetTile(cell);
+        var worldPos = new Vector3(pos.x, pos.y, 0);
+        var cell = tilemap.WorldToCell(worldPos);
+        var tile = tilemap.GetTile(cell);
 
-        if (tile is Tile tileTyped)
-        {
-            Sprite sprite = tileTyped.sprite;
+        if (tile is not Tile tileTyped) return;
+        
+        var sprite = tileTyped.sprite;
 
-            if (isPlayer)
-            {
-                if (sprite == endSprite)
-                {
-                    turnManager.hasWon = true;
-                    SceneManager.LoadScene("LevelTransition");
-                }
-            }
-        }
+        if (!isPlayer) return;
+
+        if (sprite != endSprite) return;
+        
+        turnManager.hasWon = true;
+        SceneManager.LoadScene("LevelTransition");
     }
 }
