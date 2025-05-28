@@ -1,55 +1,89 @@
+using System;
 using UnityEngine;
 
 public class SaveTest : MonoBehaviour
 {
+    private ChestData _chestData;
+    private TurnData _turnData;
+    private TurretData _turretData;
+    private TrapData _trapData;
+    private PlayerData _playerData;
+    private EnemyData _enemyData;
+    private GameData _gameData;
+    
+    private void Save()
+    {
+        var playerCombat = GameObject.Find("Player").GetComponent<PlayerCombat>();
+        var playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
+        var playerGold = GameObject.Find("Player").GetComponent<PlayerGold>();
+
+        _playerData = !playerCombat
+            ? new PlayerData(-1, -1f, new Vector2(-100, -100))
+            : new PlayerData(playerGold.gold, playerCombat.health, playerMovement.transform.position);
+
+        var enemyCombat = GameObject.Find("Enemy").GetComponent<EnemyCombat>();
+        var enemyMovement = GameObject.Find("Enemy").GetComponent<EnemyMovement>();
+
+        _enemyData = !enemyCombat
+            ? new EnemyData(-1f, new Vector2(-100, -100))
+            : new EnemyData(enemyCombat.health, enemyMovement.transform.position);
+        
+        var trap = GameObject.Find("Trap").GetComponent<TrapController>();
+        _trapData = !trap ? new TrapData(new Vector2(-100, -100)) : new TrapData((Vector2)trap.transform.position);
+        
+        var turret = GameObject.Find("Turret").GetComponent<TowerController>();
+        _turretData = !turret ? new TurretData(new Vector2(-100, -100)) : new TurretData(turret.transform.position);
+        
+        var chest = GameObject.Find("Chest").GetComponent<Chest>();
+        _chestData = !chest ? new ChestData(-1) : new ChestData(chest.storedGold);
+        
+        var turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        _turnData = !turnManager
+            ? new TurnData(StageType.None, -1, -1, false)
+            : new TurnData(turnManager.stage, turnManager.currentTurn, turnManager.maxTurns, turnManager.isGameOver);
+        
+        _gameData = new GameData(_playerData, _chestData, _turnData, _enemyData, _turretData, _trapData);
+        SaveManager.Save(_gameData);
+    }
+
+    private void Load()
+    {
+        _gameData = SaveManager.Load();
+
+        var playerCombat = GameObject.Find("Player").GetComponent<PlayerCombat>();
+        var playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
+        var playerGold = GameObject.Find("Player").GetComponent<PlayerGold>();
+        playerCombat.health = _gameData.playerData.health;
+        playerGold.gold = _gameData.playerData.gold;
+        playerMovement.targetPosition = _gameData.playerData.position;
+            
+        var enemyCombat = GameObject.Find("Enemy").GetComponent<EnemyCombat>();
+        var enemyMovement = GameObject.Find("Enemy").GetComponent<EnemyMovement>();
+        enemyCombat.health = _gameData.enemyData.health;
+        enemyMovement.transform.position = _gameData.enemyData.position;
+            
+        var chest = GameObject.Find("Chest").GetComponent<Chest>();
+        chest.storedGold = _gameData.chestData.gold;
+
+        var turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        turnManager.currentTurn = _gameData.turnData.currentTurn;
+        turnManager.isGameOver = _gameData.turnData.isGameOver;
+        turnManager.maxTurns = _gameData.turnData.maxTurns;
+        turnManager.stage = _gameData.turnData.stage;
+        
+        var turret = GameObject.Find("Turret").GetComponent<TowerController>();
+        turret.transform.position = _gameData.turretData.position;
+        
+        var trap = GameObject.Find("Trap").GetComponent<TrapController>();
+        trap.transform.position = _gameData.trapData.position;
+    }
+    
     public void Update()
     {
-        PlayerCombat playerCombat = GameObject.Find("Player").GetComponent<PlayerCombat>();
-        PlayerMovement playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
-        PlayerGold playerGold = GameObject.Find("Player").GetComponent<PlayerGold>();
-
-        EnemyCombat enemyCombat = GameObject.Find("Enemy").GetComponent<EnemyCombat>();
-        EnemyMovement enemyMovement = GameObject.Find("Enemy").GetComponent<EnemyMovement>();
-
-        TrapController trap = GameObject.Find("Trap").GetComponent<TrapController>();
-        TowerController turret = GameObject.Find("Turret").GetComponent<TowerController>();
-        Chest chest = GameObject.Find("Chest").GetComponent<Chest>();
-        TurnManager turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
-
-        ChestData chestData = new ChestData(chest.storedGold);
-        TurretData turretData = new TurretData((Vector2)turret.transform.position);
-        TrapData trapData = new TrapData((Vector2)trap.transform.position);
-        TurnData turnData = new TurnData(turnManager);
-        
-        EnemyData enemyData = new EnemyData(enemyCombat.health, (Vector2)enemyMovement.transform.position);
-        PlayerData playerData = new PlayerData(playerGold.gold, playerCombat.health, (Vector2)playerMovement.transform.position);
-
-        GameData gameData = new GameData(playerData, chestData, turnData, enemyData, turretData, trapData);
-        
         if (Input.GetKeyDown(KeyCode.S))
-            SaveManager.Save(gameData);
+            Save();
 
         if (Input.GetKeyDown(KeyCode.L))
-        {
-            GameData newData = SaveManager.Load();
-
-            playerCombat.health = newData.playerData.health;
-            playerGold.gold = newData.playerData.gold;
-            playerMovement.transform.position = (Vector2)newData.playerData.position;
-            
-            enemyCombat.health = newData.enemyData.health;
-            enemyMovement.transform.position = (Vector2)newData.enemyData.position;
-            
-            chest.storedGold = newData.chestData.gold;
-
-            turnManager.currentTurn = newData.turnData.currentTurn;
-            turnManager.isGameOver = newData.turnData.isGameOver;
-            turnManager.maxTurns = newData.turnData.maxTurns;
-            turnManager.stage = newData.turnData.stage;
-            
-            turret.transform.position = (Vector2)newData.turretData.position;
-            
-            trap.transform.position = (Vector2)newData.trapData.position;
-        }
+            Load();
     }
 }

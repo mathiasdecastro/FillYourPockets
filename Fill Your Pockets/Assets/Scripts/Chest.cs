@@ -13,17 +13,18 @@ public class Chest : MonoBehaviour
     [SerializeField] private int goldPerInterval = 5;
     [SerializeField] private float intervalSeconds = 3f;
 
-    private float timer = 0f;
+    private float _timer = 0f;
+    
     public int storedGold = 0;
 
     void Update()
     {
-        timer += Time.deltaTime;
+        _timer += Time.deltaTime;
 
-        if (timer >= intervalSeconds)
+        if (_timer >= intervalSeconds)
         {
             storedGold += goldPerInterval;
-            timer = 0f;
+            _timer = 0f;
         }
     }
 
