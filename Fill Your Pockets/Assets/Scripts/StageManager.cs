@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -5,8 +6,9 @@ public class StageManager : MonoBehaviour
 {
     public GameObject movementPanel; 
     public GameObject attackPanel;
-    private CanvasGroup movementGroup;
-    private CanvasGroup attackGroup;
+    
+    private CanvasGroup _movementGroup;
+    private CanvasGroup _attackGroup;
 
     private enum Phase
     {
@@ -14,77 +16,81 @@ public class StageManager : MonoBehaviour
         Attack
     }
 
-    private Phase currentPhase;
+    private Phase _currentPhase;
 
-    void Start()
+    private void Start()
     {
-        currentPhase = Phase.Movement;
-        movementGroup = movementPanel.GetComponent<CanvasGroup>();
-        attackGroup = attackPanel.GetComponent<CanvasGroup>();
+        _currentPhase = Phase.Movement;
+        _movementGroup = movementPanel.GetComponent<CanvasGroup>();
+        _attackGroup = attackPanel.GetComponent<CanvasGroup>();
         
         UpdatePanel(); 
     }
 
     private void UpdatePanel()
     {
-        if (currentPhase == Phase.Movement)
+        switch (_currentPhase)
         {
-            movementPanel.SetActive(true); 
-            attackPanel.SetActive(false);
-        }
-        else if (currentPhase == Phase.Attack)
-        {
-            movementPanel.SetActive(false);
-            attackPanel.SetActive(true);
+            case Phase.Movement:
+                movementPanel.SetActive(true); 
+                attackPanel.SetActive(false);
+                break;
+            
+            case Phase.Attack:
+                movementPanel.SetActive(false);
+                attackPanel.SetActive(true);
+                break;
+            
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
     public void SwitchPhase()
     {
-        if (currentPhase == Phase.Movement)
-        {
-            currentPhase = Phase.Attack;
-        }
-        else
-        {
-            currentPhase = Phase.Movement;
-        }
+        _currentPhase = _currentPhase == Phase.Movement ? Phase.Attack : Phase.Movement;
 
         StartCoroutine(FadePanels());
     }
 
     private IEnumerator FadePanels()
     {
-        float fadeTime = 1f; 
-        float elapsedTime = 0f;
+        const float fadeTime = 1f; 
+        var elapsedTime = 0f;
 
         while (elapsedTime < fadeTime)
         {
-            float alphaValue = Mathf.Lerp(0, 1, elapsedTime / fadeTime);
-            if (currentPhase == Phase.Movement)
+            var alphaValue = Mathf.Lerp(0, 1, elapsedTime / fadeTime);
+            
+            switch (_currentPhase)
             {
-                movementGroup.alpha = alphaValue;
-                attackGroup.alpha = 1 - alphaValue; 
-            }
-            else if (currentPhase == Phase.Attack)
-            {
-                attackGroup.alpha = alphaValue;
-                movementGroup.alpha = 1 - alphaValue; 
+                case Phase.Movement:
+                    _movementGroup.alpha = alphaValue;
+                    _attackGroup.alpha = 1 - alphaValue;
+                    break;
+                
+                case Phase.Attack:
+                    _attackGroup.alpha = alphaValue;
+                    _movementGroup.alpha = 1 - alphaValue;
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        if (currentPhase == Phase.Movement)
+        if (_currentPhase == Phase.Movement)
         {
-            movementGroup.alpha = 1;
-            attackGroup.alpha = 0;
+            _movementGroup.alpha = 1;
+            _attackGroup.alpha = 0;
         }
         else
         {
-            attackGroup.alpha = 1;
-            movementGroup.alpha = 0;
+            _attackGroup.alpha = 1;
+            _movementGroup.alpha = 0;
         }
 
         UpdatePanel();

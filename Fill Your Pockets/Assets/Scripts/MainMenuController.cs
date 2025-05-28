@@ -1,34 +1,29 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
-    public GameObject tutorialPopup;
-    public GameObject tutorial;
+    private GameObject _tutorialPopup;
+    private GameObject _tutorial;
 
-    public Image fadeOverlay;
-    public float fadeSpeed = 1.5f;
-
-
-    private void Start() => tutorialPopup.SetActive(false);
+    private void Start() => _tutorialPopup.SetActive(false);
 
     public void OnGameButtonClicked()
     {
-        tutorialPopup.SetActive(true); 
+        _tutorialPopup.SetActive(true); 
         OnStartTutorial();
     }
 
     public void OnSaveButtonClicked() => SceneManager.LoadScene("SaveScene");
 
-    public void OnStartTutorial()
+    private void OnStartTutorial()
     {
-        tutorial.SetActive(true); 
+        _tutorial.SetActive(true); 
         StartCoroutine(EndTutorialAndLoadGameScene());
     }
 
-    public IEnumerator EndTutorialAndLoadGameScene()
+    private static IEnumerator EndTutorialAndLoadGameScene()
     {
         yield return new WaitForSeconds(5f);
         SceneManager.LoadScene("GameScene");

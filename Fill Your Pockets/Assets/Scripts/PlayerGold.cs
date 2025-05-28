@@ -8,11 +8,13 @@ public class PlayerGold : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Chest")) return;
+        if (!other.CompareTag("Chest"))
+            return;
         
         var chest = other.GetComponent<Chest>();
 
-        if (!chest) return;
+        if (!chest)
+            return;
         
         var collectedGold = chest.GetGold();
         gold += collectedGold;

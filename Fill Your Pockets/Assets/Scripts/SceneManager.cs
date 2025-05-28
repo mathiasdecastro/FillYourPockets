@@ -3,43 +3,24 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    public static SceneController Instance;
+    private static SceneController _instance;
 
     private void Awake()
     {
-       
-        if (Instance == null)
+        if (!_instance)
         {
-            Instance = this;
+            _instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
-        {
             Destroy(gameObject);
-        }
     }
 
-    public void LoadMenuScene()
-    {
-        Debug.Log("Menu");
-        SceneManager.LoadScene("MenuScene");
-    }
+    public void LoadMenuScene() => SceneManager.LoadScene("MenuScene");
 
-    public void LoadGameScene()
-    {
-        Debug.Log("Qdfeqgrgdfgbergdfgf");
-        SceneManager.LoadScene("GameScene");
-    }
+    public void LoadGameScene() => SceneManager.LoadScene("GameScene");
 
-    public void ReloadCurrentScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
+    public void ReloadCurrentScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-    public void QuitGame()
-    {
-        Debug.Log("Quit Game");
-        Application.Quit();
-    }
-
+    public void QuitGame() => Application.Quit();
 }

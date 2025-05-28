@@ -13,9 +13,9 @@ public class Chest : MonoBehaviour
     [SerializeField] private int goldPerInterval = 5;
     [SerializeField] private float intervalSeconds = 3f;
 
-    private float _timer = 0f;
+    private float _timer;
     
-    public int storedGold = 0;
+    public int storedGold;
 
     void Update()
     {

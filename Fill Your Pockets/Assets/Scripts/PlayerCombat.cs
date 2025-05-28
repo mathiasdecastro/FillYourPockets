@@ -16,7 +16,8 @@ public class PlayerCombat : MonoBehaviour
     private static readonly int Shoot = Animator.StringToHash("Shoot");
     private static readonly int Potion = Animator.StringToHash("Potion");
     private static readonly int Stick = Animator.StringToHash("Stick");
-    
+    private static readonly int Hit = Animator.StringToHash("Hit");
+
     private const float StickDamage = 10f;
     private const float ArrowSpeed = 20f;
     private const float ThrowingDistance = 3f;
@@ -39,14 +40,16 @@ public class PlayerCombat : MonoBehaviour
         _camera = Camera.main;
     }
 
-    private void Update() 
+    private void Update()
     {
-        if (Input.GetMouseButton(0)) DetectTileClick();
+        if (Input.GetMouseButton(0))
+            DetectTileClick();
     }
 
     private void DetectTileClick()
     {
-        if (!_waitingForDirection) return;
+        if (!_waitingForDirection)
+            return;
         
         Vector2 mouseWorldPos = _camera.ScreenToWorldPoint(Input.mousePosition);
         var newDirection = PlayerMovement.ConvertToGrid(mouseWorldPos);
@@ -63,7 +66,8 @@ public class PlayerCombat : MonoBehaviour
     
     public void ShootArrowButton()
     {
-        if (turnManager.stage != StageType.PlayerAttack || turnManager.isGameOver) return;
+        if (turnManager.stage != StageType.PlayerAttack || turnManager.isGameOver)
+            return;
         
         _waitingForDirection = true;
         _pendingAction = PendingAction.Shoot;
@@ -71,7 +75,8 @@ public class PlayerCombat : MonoBehaviour
 
     public void ThrowPotionButton()
     {
-        if (turnManager.stage != StageType.PlayerAttack || turnManager.isGameOver) return;
+        if (turnManager.stage != StageType.PlayerAttack || turnManager.isGameOver)
+            return;
         
         _waitingForDirection = true;
         _pendingAction = PendingAction.Potion;
@@ -79,7 +84,8 @@ public class PlayerCombat : MonoBehaviour
 
     public void StickAttackButton()
     {
-        if (turnManager.stage != StageType.PlayerAttack || turnManager.isGameOver) return;
+        if (turnManager.stage != StageType.PlayerAttack || turnManager.isGameOver)
+            return;
        
         _waitingForDirection = true;
         _pendingAction = PendingAction.Stick;
@@ -89,8 +95,13 @@ public class PlayerCombat : MonoBehaviour
     {
         health -= damage;
         _healthText.text = health.ToString(CultureInfo.InvariantCulture);
-        _animator.SetTrigger("Hit");
-        if (health <= 0) Destroy(gameObject);
+        _animator.SetTrigger(Hit);
+
+        if (health <= 0)
+        {
+            _healthText.text = "0";
+            Destroy(gameObject);
+        }
     }
 
     public void ShootArrow()

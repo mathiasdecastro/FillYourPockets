@@ -10,7 +10,8 @@ public class Arrow : MonoBehaviour
         {
             var enemy = other.GetComponent<EnemyCombat>();
 
-            if (enemy) enemy.TakeDamage(Damage);
+            if (enemy)
+                enemy.TakeDamage(Damage);
 
             Destroy(gameObject);
         }
@@ -18,10 +19,12 @@ public class Arrow : MonoBehaviour
         {
             var player = other.GetComponent<PlayerCombat>();
 
-            if (player) player.TakeDamage(Damage);
+            if (player)
+                player.TakeDamage(Damage);
 
             Destroy(gameObject);
         }
-        else if (other.CompareTag("Fence")) Destroy(gameObject);
+        else if (other.CompareTag("Fence"))
+            Destroy(gameObject);
     }
 }

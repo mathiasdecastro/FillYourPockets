@@ -10,74 +10,55 @@ public class TurretData
 
 public class TowerController : MonoBehaviour
 {
-    [Header("Tower Settings")]
-    public float damage = 1f;
-    public float arrowSpeed = 20f;
-    public GameObject arrowPrefab;
-    public Transform shootPoint;
+    [SerializeField] private float arrowSpeed = 20f;
+    [SerializeField] private GameObject arrowPrefab;
+    [SerializeField] private Transform shootPoint;
+    [SerializeField] private TurnManager turnManager;
 
-    [Header("References")]
-    public TurnManager turnManager;
+    private bool _hasAttacked;
+    private Vector2 _attackDirection;
+    private Transform _player;
 
-    private bool hasAttacked = false;
-    private Vector2 attackDirection;
-    private Transform player;
-
-    private static readonly Vector2[] attackOffsets = new Vector2[]
-    {
-        new Vector2(1, 0.5f),
-        new Vector2(-1, -0.5f),
-        new Vector2(1, -0.5f),
-        new Vector2(-1, 0.5f),
-        new Vector2(2, 0),
-        new Vector2(-2, 0),
-        new Vector2(0, 1),
-        new Vector2(0, -1),
-        new Vector2(2, 1),
-        new Vector2(2, -1),
-        new Vector2(-2, 1),
-        new Vector2(-2, -1),
-        new Vector2(4, 0),
-        new Vector2(-4, 0),
-        new Vector2(0, 2),
-        new Vector2(0, -2),
-        new Vector2(3, -0.5f),
-        new Vector2(-3, 0.5f),
-        new Vector2(1, 1.5f),
-        new Vector2(-1, 1.5f),
-        new Vector2(1, -1.5f),
-        new Vector2(-1, -1.5f),
+    private static readonly Vector2[] AttackOffsets = {
+        new(1, 0.5f),
+        new(-1, -0.5f),
+        new(1, -0.5f),
+        new(-1, 0.5f),
+        new(2, 1),
+        new(2, -1),
+        new(-2, 1),
+        new(-2, -1),
     };
 
-    void Start() => player = GameObject.Find("Player").transform;
+    private void Start() => _player = GameObject.Find("Player").transform;
 
-    void Update()
+    private void Update()
     {
-        if (turnManager.stage == StageType.TurretAttack && !hasAttacked && !turnManager.isGameOver)
+        if (turnManager.stage == StageType.TurretAttack && !_hasAttacked && !turnManager.isGameOver)
         {
             if (IsPlayerInRange())
             {
                 ShootArrow();
-                hasAttacked = true;
+                _hasAttacked = true;
             }
 
             turnManager.EndTurn();
         }
 
         if (turnManager.stage != StageType.TurretAttack)
-            hasAttacked = false;
+            _hasAttacked = false;
     }
 
-    bool IsPlayerInRange()
+    private bool IsPlayerInRange()
     {
-        Vector2 playerPos = player.position;
-        Vector2 pos = (Vector2)transform.position;
+        Vector2 playerPos = _player.position;
+        Vector2 pos = transform.position;
 
-        foreach (Vector2 offset in attackOffsets)
+        foreach (var offset in AttackOffsets)
         {
             if (playerPos == pos + offset)
             {
-                attackDirection = offset;
+                _attackDirection = offset;
                 return true;
             }
         }
@@ -85,14 +66,14 @@ public class TowerController : MonoBehaviour
         return false;
     }
 
-    void ShootArrow()
+    private void ShootArrow()
     {
-        GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
-        Rigidbody2D rb = arrow.GetComponent<Rigidbody2D>();
+        var arrow = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
+        var rb = arrow.GetComponent<Rigidbody2D>();
 
-        if (rb != null)
+        if (rb)
         {
-            Vector2 normalizedDirection = attackDirection.normalized;
+            var normalizedDirection = _attackDirection.normalized;
             rb.linearVelocity = normalizedDirection * arrowSpeed;
         }
     }

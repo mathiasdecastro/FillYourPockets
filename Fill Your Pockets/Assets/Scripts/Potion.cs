@@ -4,28 +4,30 @@ using UnityEngine;
 
 public class Potion : MonoBehaviour
 {
-    public float delayBeforeExplode = 0.5f;
-    public float damage = 50f;
-    public LayerMask damageLayer;
+    [SerializeField] private float delayBeforeExplosion = 0.5f;
+    [SerializeField] private float damage = 50f;
+    [SerializeField] private LayerMask damageLayer;
 
-    private Animator animator;
-    private List<Vector2> blockedPositions = new List<Vector2>();
+    private static readonly int Bomb = Animator.StringToHash("bomb");
+    private readonly List<Vector2> _blockedPositions = new();
+    
+    private Animator _animator;
 
-    public void Awake()
+    private void Awake()
     {
-        animator = GetComponent<Animator>();
-        GameObject[] fences = GameObject.FindGameObjectsWithTag("Fence");
+        _animator = GetComponent<Animator>();
+        var fences = GameObject.FindGameObjectsWithTag("Fence");
 
-        foreach (GameObject fence in fences)
+        foreach (var fence in fences)
         {
-            Vector2 fencePos = (Vector2)fence.transform.position;
-            blockedPositions.Add(fencePos);
+            Vector2 fencePos = fence.transform.position;
+            _blockedPositions.Add(fencePos);
         }
     }
 
     public void ExplodeAt(Vector2 targetPosition)
     {
-        if (blockedPositions.Contains(targetPosition))
+        if (_blockedPositions.Contains(targetPosition))
             return;
 
         transform.position = targetPosition;
@@ -34,39 +36,38 @@ public class Potion : MonoBehaviour
 
     private IEnumerator Explode(Vector2 target)
     {
-        yield return new WaitForSeconds(delayBeforeExplode);
+        yield return new WaitForSeconds(delayBeforeExplosion);
 
-        animator.SetTrigger("bomb");
-        Debug.Log("Explosion");
-        float animLength = animator.GetCurrentAnimatorStateInfo(0).length;
+        _animator.SetTrigger(Bomb);
+        var animLength = _animator.GetCurrentAnimatorStateInfo(0).length;
         yield return new WaitForSeconds(animLength / 2);
         
         DoExplosionDamage(target);
         Destroy(gameObject);
     }
 
-    void DoExplosionDamage(Vector2 center)
+    private void DoExplosionDamage(Vector2 center)
     {
-        List<Vector2> affectedTiles = GetAdjacentTiles(center);
+        var affectedTiles = GetAdjacentTiles(center);
 
-        foreach (Vector2 pos in affectedTiles)
+        foreach (var pos in affectedTiles)
         {
-            Collider2D[] hits = Physics2D.OverlapPointAll(pos, damageLayer);
+            var hits = Physics2D.OverlapPointAll(pos, damageLayer);
 
-            foreach (Collider2D hit in hits)
+            foreach (var hit in hits)
             {
-                EnemyCombat enemy = hit.GetComponent<EnemyCombat>();
+                var enemy = hit.GetComponent<EnemyCombat>();
 
-                if (enemy != null)
-                    enemy.TakeDamage((int)damage);
+                if (enemy)
+                    enemy.TakeDamage(damage);
             }
         }
     }
 
-    List<Vector2> GetAdjacentTiles(Vector2 center)
+    private List<Vector2> GetAdjacentTiles(Vector2 center)
     {
-        float tileW = 1f;
-        float tileH = 0.5f;
+        const float tileW = 1f;
+        const float tileH = 0.5f;
 
         return new List<Vector2>()
         {

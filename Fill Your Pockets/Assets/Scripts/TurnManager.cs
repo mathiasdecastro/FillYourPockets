@@ -35,65 +35,66 @@ public class TurnData
 public class TurnManager : MonoBehaviour
 {
     public int maxTurns = 3;
-    public int currentTurn = 0;
+    public int currentTurn;
     public StageType stage;
-    public bool isGameOver = false;
-    public bool hasWon = false;
-    public Sprite playerMoveSprite;
-    public Sprite playerAttackSprite;
-    public Sprite enemyMoveSprite;
-    public Sprite enemyAttackSprite;
-    public Sprite turretAttackSprite;
+    public bool isGameOver;
+    public bool hasWon;
+    
+    [SerializeField] private Sprite playerMoveSprite;
+    [SerializeField] private Sprite playerAttackSprite;
+    [SerializeField] private Sprite enemyMoveSprite;
+    [SerializeField] private Sprite enemyAttackSprite;
+    [SerializeField] private Sprite turretAttackSprite;
 
-    private SpriteRenderer stageImage;
-    private TextMeshProUGUI textTurns;
+    private SpriteRenderer _stageImage;
+    private TextMeshProUGUI _textTurns;
 
-    void Start()
+    private void Start()
     {
         stage = StageType.PlayerMoveFirst;
-        stageImage = GameObject.Find("StageImage").GetComponent<SpriteRenderer>();
-        stageImage.sprite = playerMoveSprite;
-        textTurns = GameObject.Find("TextTurns").GetComponent<TextMeshProUGUI>();
-        textTurns.text = (maxTurns - currentTurn).ToString();
+        _stageImage = GameObject.Find("StageImage").GetComponent<SpriteRenderer>();
+        _stageImage.sprite = playerMoveSprite;
+        _textTurns = GameObject.Find("TextTurns").GetComponent<TextMeshProUGUI>();
+        _textTurns.text = (maxTurns - currentTurn).ToString();
     }
 
-    void Update()
+    private void Update()
     {
         if (stage == StageType.EndTurn && !isGameOver)
             EndTurn();
     }
 
-    void NextStage()
+    private void NextStage()
     {
         switch (stage)
         {
             case StageType.PlayerMoveFirst:
-                stageImage.sprite = playerAttackSprite;
+                _stageImage.sprite = playerAttackSprite;
                 stage = StageType.PlayerAttack;
                 break;
 
             case StageType.PlayerMoveSecond:
-                stageImage.sprite = enemyMoveSprite;
+                _stageImage.sprite = enemyMoveSprite;
                 stage = StageType.EnemyMoveFirst;
                 break;
 
             case StageType.PlayerAttack:
-                stageImage.sprite = playerMoveSprite;
+                _stageImage.sprite = playerMoveSprite;
                 stage = StageType.PlayerMoveSecond;
                 break;
 
             case StageType.EnemyMoveFirst:
-                stageImage.sprite = enemyAttackSprite;
+                _stageImage.sprite = enemyAttackSprite;
                 stage = StageType.EnemyAttack;
                 break;
 
             case StageType.EnemyMoveSecond:
-                stageImage.sprite = turretAttackSprite;
+                _stageImage.sprite = turretAttackSprite;
                 stage = StageType.TurretAttack;
                 break;
 
             case StageType.EnemyAttack:
-                stageImage.sprite = enemyMoveSprite;
+                _stageImage.sprite = enemyMoveSprite;
                 stage = StageType.EnemyMoveSecond;
                 break;
 
@@ -105,10 +106,11 @@ public class TurnManager : MonoBehaviour
                 if (!isGameOver)
                 {
                     stage = StageType.PlayerMoveFirst;
-                    stageImage.sprite = playerMoveSprite;
+                    _stageImage.sprite = playerMoveSprite;
                 }
                 break;
 
+            case StageType.None:
             default:
                 break;
         }
@@ -117,7 +119,6 @@ public class TurnManager : MonoBehaviour
 
     public void EndTurn()
     {
-
         if (hasWon)
         {
             isGameOver = true;
@@ -126,9 +127,9 @@ public class TurnManager : MonoBehaviour
         
         if (stage == StageType.EndTurn && !isGameOver)
         {
-            Debug.Log("Tour : " + (currentTurn + 1) + " Terminé.");
+            Debug.Log("Turn : " + (currentTurn + 1) + " ended.");
             currentTurn++;
-            textTurns.text = (maxTurns - currentTurn).ToString();
+            _textTurns.text = (maxTurns - currentTurn).ToString();
         }
 
         if (currentTurn >= maxTurns && !hasWon)

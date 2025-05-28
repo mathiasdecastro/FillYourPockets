@@ -21,7 +21,6 @@ public abstract class CharacterMovement : MonoBehaviour
     [SerializeField] protected bool isPlayer;
     [SerializeField] protected Tilemap tilemap;
     [SerializeField] protected TurnManager turnManager;
-    [SerializeField] protected PlayerGold playerGold;
     [SerializeField] protected List<Sprite> nonWalkableTiles = new();
     [SerializeField] protected Sprite endSprite;
 
@@ -49,9 +48,11 @@ public abstract class CharacterMovement : MonoBehaviour
         var cell = tilemap.WorldToCell(worldPos);
         var tile = tilemap.GetTile(cell);
 
-        if (!tile) return false;
+        if (!tile)
+            return false;
 
-        if (tile is not Tile tileTyped) return true;
+        if (tile is not Tile tileTyped)
+            return true;
         
         var sprite = tileTyped.sprite;
 
@@ -64,13 +65,16 @@ public abstract class CharacterMovement : MonoBehaviour
         var cell = tilemap.WorldToCell(worldPos);
         var tile = tilemap.GetTile(cell);
 
-        if (tile is not Tile tileTyped) return;
+        if (tile is not Tile tileTyped)
+            return;
         
         var sprite = tileTyped.sprite;
 
-        if (!isPlayer) return;
+        if (!isPlayer)
+            return;
 
-        if (sprite != endSprite) return;
+        if (sprite != endSprite)
+            return;
         
         turnManager.hasWon = true;
         SceneManager.LoadScene("LevelTransition");

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PlayerMovement : CharacterMovement
 {
@@ -83,7 +82,8 @@ public class PlayerMovement : CharacterMovement
         {
             var checkPos = pos + dir;
 
-            if (!IsWalkable(checkPos) || BlockedPositions.Contains(checkPos)) continue;
+            if (!IsWalkable(checkPos) || BlockedPositions.Contains(checkPos))
+                continue;
             
             var highlight = Instantiate(highlightPrefab, checkPos, Quaternion.identity);
             _currentHighlights.Add(highlight);
@@ -92,7 +92,8 @@ public class PlayerMovement : CharacterMovement
 
     private void ClearHighlight()
     {
-        foreach (var obj in _currentHighlights) Destroy(obj);
+        foreach (var obj in _currentHighlights)
+            Destroy(obj);
         
         _currentHighlights.Clear();
     }

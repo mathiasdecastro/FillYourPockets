@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class SaveTest : MonoBehaviour
@@ -29,7 +28,7 @@ public class SaveTest : MonoBehaviour
             : new EnemyData(enemyCombat.health, enemyMovement.transform.position);
         
         var trap = GameObject.Find("Trap").GetComponent<TrapController>();
-        _trapData = !trap ? new TrapData(new Vector2(-100, -100)) : new TrapData((Vector2)trap.transform.position);
+        _trapData = !trap ? new TrapData(new Vector2(-100, -100)) : new TrapData(trap.transform.position);
         
         var turret = GameObject.Find("Turret").GetComponent<TowerController>();
         _turretData = !turret ? new TurretData(new Vector2(-100, -100)) : new TurretData(turret.transform.position);

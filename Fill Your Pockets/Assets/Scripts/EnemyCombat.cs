@@ -1,53 +1,52 @@
+using System.Linq;
 using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
 {
-    public float damage = 30f;
-    public float health = 100f;
-    public TurnManager tm;
-
-    private bool hasAttacked = false;
-
+    [SerializeField] private float damage = 30f;
+    [SerializeField] private TurnManager turnManager;
+    
+    private static readonly int Hit = Animator.StringToHash("Hit");
+    
+    private bool _hasAttacked;
     private Animator _animator;
 
-        private void Start()
-    {
-        _animator = GetComponent<Animator>();
-    }
+    public float health = 100f;
+    
+    private void Start() => _animator = GetComponent<Animator>();
 
-    void Update()
+    private void Update()
     {
-        if (tm.stage == StageType.EnemyAttack && !hasAttacked && !tm.isGameOver)
+        if (turnManager.stage == StageType.EnemyAttack && !_hasAttacked && !turnManager.isGameOver)
         {
             if (IsPlayerAround())
             {
-                PlayerCombat player = GameObject.Find("Player").GetComponent<PlayerCombat>();
+                var player = GameObject.Find("Player").GetComponent<PlayerCombat>();
                 player.TakeDamage(damage);
-                hasAttacked = true;
+                _hasAttacked = true;
             }
 
-            tm.EndTurn();
+            turnManager.EndTurn();
         }
 
-        if (tm.stage != StageType.EnemyAttack) hasAttacked = false;
+        if (turnManager.stage != StageType.EnemyAttack)
+            _hasAttacked = false;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damageTaken)
     {
-        health -= damage;
-        Debug.Log("Health : " + health);
-        _animator.SetTrigger("Hit");
-        if (health <= 0) Destroy(gameObject);
+        health -= damageTaken;
+        _animator.SetTrigger(Hit);
+        
+        if (health <= 0)
+            Destroy(gameObject);
     }
 
-    bool IsPlayerAround()
+    private bool IsPlayerAround()
     {
-        Vector2 pos = (Vector2)transform.position;
+        Vector2 pos = transform.position;
         Vector2 playerPos = GameObject.Find("Player").transform.position;
 
-        foreach (Vector2 dir in Directions.Isometric)
-            if (playerPos == pos + dir) return true;
-
-        return false;
+        return Directions.Isometric.Any(dir => playerPos == pos + dir);
     }
 }

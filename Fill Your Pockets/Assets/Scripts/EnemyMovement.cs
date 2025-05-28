@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class EnemyMovement : CharacterMovement
 {
+    private static readonly int Walking = Animator.StringToHash("Walking");
+    
     private bool _isMoving;
     private bool _hasMoved;
     private Transform _target;
@@ -15,11 +17,11 @@ public class EnemyMovement : CharacterMovement
         _animator = GetComponent<Animator>();
     }
 
-    void Update()
+    private void Update()
     {
         if ((turnManager.stage == StageType.EnemyMoveFirst || turnManager.stage == StageType.EnemyMoveSecond) && !_hasMoved && !turnManager.isGameOver)
         {
-            _animator.SetBool("Walking", true);
+            _animator.SetBool(Walking, true);
             MoveToTarget();
             _hasMoved = true;
         }
@@ -32,34 +34,40 @@ public class EnemyMovement : CharacterMovement
             {
                 _isMoving = false;
                 _hasMoved = false;
-                _animator.SetBool("Walking", false);
+                _animator.SetBool(Walking, false);
                 turnManager.EndTurn();
             }
         }
     }
 
-    void MoveToTarget()
+    private void MoveToTarget()
     {
+        if (!_target)
+        {
+            _moveTarget = transform.position;
+            return;
+        }
+
         Vector2 targetPos = _target.position;
         Vector2 currentPos = transform.position;
-        Vector2 bestMove = currentPos;
+        var bestMove = currentPos;
 
-        float minDist = Vector2.Distance(currentPos, targetPos);
+        var minDist = Vector2.Distance(currentPos, targetPos);
 
-        foreach (Vector2 dir in Directions.Isometric)
+        foreach (var dir in Directions.Isometric)
         {
-            Vector2 nextMove = currentPos + dir;
+            var nextMove = currentPos + dir;
 
             if (BlockedPositions.Contains(nextMove))
                 continue;
 
-            float dist = Vector2.Distance(nextMove, targetPos);
+            var dist = Vector2.Distance(nextMove, targetPos);
 
-            if (dist < minDist)
-            {
-                minDist = dist;
-                bestMove = nextMove;
-            }
+            if (!(dist < minDist))
+                continue;
+            
+            minDist = dist;
+            bestMove = nextMove;
         }
 
         _moveTarget = bestMove;
