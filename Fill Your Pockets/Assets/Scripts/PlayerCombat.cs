@@ -89,7 +89,7 @@ public class PlayerCombat : MonoBehaviour
     {
         health -= damage;
         _healthText.text = health.ToString(CultureInfo.InvariantCulture);
-
+        _animator.SetTrigger("Hit");
         if (health <= 0) Destroy(gameObject);
     }
 

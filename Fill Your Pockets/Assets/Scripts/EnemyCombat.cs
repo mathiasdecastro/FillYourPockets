@@ -8,6 +8,13 @@ public class EnemyCombat : MonoBehaviour
 
     private bool hasAttacked = false;
 
+    private Animator _animator;
+
+        private void Start()
+    {
+        _animator = GetComponent<Animator>();
+    }
+
     void Update()
     {
         if (tm.stage == StageType.EnemyAttack && !hasAttacked && !tm.isGameOver)
@@ -29,7 +36,7 @@ public class EnemyCombat : MonoBehaviour
     {
         health -= damage;
         Debug.Log("Health : " + health);
-        
+        _animator.SetTrigger("Hit");
         if (health <= 0) Destroy(gameObject);
     }
 
