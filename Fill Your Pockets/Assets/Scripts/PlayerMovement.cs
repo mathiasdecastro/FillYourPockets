@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerMovement : CharacterMovement
 {
@@ -10,13 +11,14 @@ public class PlayerMovement : CharacterMovement
     
     private bool _hasMoved;
     private Animator _animator;
-    private Vector2 _targetPosition;
     private Camera _camera;
+    
+    public Vector2 targetPosition;
     
     protected override void Start()
     {
         base.Start();
-        _targetPosition = transform.position;
+        targetPosition = transform.position;
         _animator = GetComponent<Animator>();
         _camera = Camera.main;
     }
@@ -26,7 +28,7 @@ public class PlayerMovement : CharacterMovement
         if (turnManager.stage != StageType.PlayerMoveFirst &&
             (turnManager.stage != StageType.PlayerMoveSecond || turnManager.isGameOver)) return;
         
-        if ((Vector2)transform.position == _targetPosition)
+        if ((Vector2)transform.position == targetPosition)
         {
             _animator.SetBool(Walk, false);
 
@@ -46,16 +48,16 @@ public class PlayerMovement : CharacterMovement
                 var nextPos = ConvertToGrid(mousePos);
                 IsEnd(mousePos);
 
-                if (IsAdjacent(_targetPosition, nextPos) && IsWalkable(mousePos) && !BlockedPositions.Contains(nextPos))
+                if (IsAdjacent(targetPosition, nextPos) && IsWalkable(mousePos) && !BlockedPositions.Contains(nextPos))
                 {
                     _animator.SetBool(Walk, true);
-                    _targetPosition = nextPos;
+                    targetPosition = nextPos;
                     _hasMoved = true;
                 }
             }
         }
 
-        transform.position = Vector2.MoveTowards(transform.position, _targetPosition, moveSpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
     }
 
     public static Vector2 ConvertToGrid(Vector2 input)
@@ -75,7 +77,7 @@ public class PlayerMovement : CharacterMovement
     {
         ClearHighlight();
 
-        var pos = new Vector2(_targetPosition.x, _targetPosition.y - 1);
+        var pos = new Vector2(targetPosition.x, targetPosition.y - 1);
         
         foreach (var dir in Directions.Isometric)
         {

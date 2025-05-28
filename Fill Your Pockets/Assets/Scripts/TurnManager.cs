@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public enum StageType
 {
+    None,
     PlayerAttack,
     PlayerMoveFirst,
     PlayerMoveSecond,
@@ -22,12 +23,12 @@ public class TurnData
     public int maxTurns;
     public bool isGameOver;
 
-    public TurnData(TurnManager turnManager)
+    public TurnData(StageType stageType, int currentTurnGame, int maxTurnsGame, bool isCurrentGameOver)
     {
-        stage = turnManager.stage;
-        currentTurn = turnManager.currentTurn;
-        maxTurns = turnManager.maxTurns;
-        isGameOver = turnManager.isGameOver;
+        stage = stageType;
+        currentTurn = currentTurnGame;
+        maxTurns = maxTurnsGame;
+        isGameOver = isCurrentGameOver;
     }
 }
 
