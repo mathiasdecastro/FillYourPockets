@@ -46,7 +46,7 @@ public class EnemyCombat : MonoBehaviour
     {
         Vector2 pos = transform.position;
         Vector2 playerPos = GameObject.Find("Player").transform.position;
-
+        Debug.Log(Directions.Isometric.Any(dir => playerPos == pos + dir));
         return Directions.Isometric.Any(dir => playerPos == pos + dir);
     }
 }

@@ -18,7 +18,7 @@ public class PlayerGold : MonoBehaviour
         
         var collectedGold = chest.GetGold();
         gold += collectedGold;
-        goldText.text = goldText.ToString();
+        goldText.text = gold.ToString();
         
         Debug.Log("You got : " + collectedGold + " golds");
     }

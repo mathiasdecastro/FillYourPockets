@@ -4,14 +4,14 @@ using System.Collections;
 
 public class MainMenuController : MonoBehaviour
 {
-    private GameObject _tutorialPopup;
-    private GameObject _tutorial;
 
-    private void Start() => _tutorialPopup.SetActive(false);
+    public GameObject tutorial;
+
+    private void Start() => tutorial.SetActive(false);
 
     public void OnGameButtonClicked()
     {
-        _tutorialPopup.SetActive(true); 
+        tutorial.SetActive(true); 
         OnStartTutorial();
     }
 
@@ -19,7 +19,7 @@ public class MainMenuController : MonoBehaviour
 
     private void OnStartTutorial()
     {
-        _tutorial.SetActive(true); 
+        tutorial.SetActive(true); 
         StartCoroutine(EndTutorialAndLoadGameScene());
     }
 
