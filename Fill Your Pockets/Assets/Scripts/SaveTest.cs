@@ -45,7 +45,7 @@ public class SaveTest : MonoBehaviour
         SaveManager.Save(_gameData);
     }
 
-    private void Load()
+    public void Load()
     {
         _gameData = SaveManager.Load();
 
@@ -77,7 +77,7 @@ public class SaveTest : MonoBehaviour
         trap.transform.position = _gameData.trapData.position;
     }
     
-    public void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.S))
             Save();
